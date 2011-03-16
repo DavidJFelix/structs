@@ -1,7 +1,7 @@
-#!/usr/bin/python3
+﻿#!/usr/bin/env python3
 # -*- coding: UTF-8 -*-
 #
-# test_nodes.py
+# b_trees.py
 #
 # Copyright (C) 2011  David J Felix
 #
@@ -17,22 +17,3 @@
 #
 # You should have received a copy of the GNU Affero General Public License along
 # with this program. If not, see <http://www.gnu.org/licenses/>.
-
-import unittest
-from random import randint
-from nodes import *
-
-class TestNode(unittest.TestCase):
-    """
-    """
-
-    def setUp(self):
-        pass
-
-if __name__ == '__main__':
-    unittest.main()
-        
-
-        
-
-    
