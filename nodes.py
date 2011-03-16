@@ -38,17 +38,16 @@ class Node(object):
         del self._data
         self._data = None
 
-# New node types should be added here and should probably inherit Node
 class LinkedNode(Node):
     """A container class with one child"""
 
     def __init__(self, data = None, next = None):
-        super(Node, self).__init__(self, data)
+        super(LinkedNode, self).__init__(data)
         self._next = next
 
     @property
     def next(self):
-        """The next property stores the node that is linked"""
+        """The next property stores the next node that is linked"""
         return self._next
 
     @next.setter
@@ -63,13 +62,13 @@ class LinkedNode(Node):
 class BiLinkedNode(LinkedNode):
     """A bidirectional container class with one child"""
 
-    def __init__(self, data, next, prev):
-        super(LinkedNode, self).__init__(self, data, next)
+    def __init__(self, data = None, next = None, prev = None):
+        super(BiLinkedNode, self).__init__(data, next)
         self._prev = prev
 
     @property
     def prev(self):
-        """"""
+        """The prev property stores the previous node that is linked"""
         return self._prev
 
     @prev.setter
@@ -84,19 +83,18 @@ class BiLinkedNode(LinkedNode):
 class BinaryNode(Node):
     """A container class with two children"""
 
-    def __init__(self, data, left = None, right = None):
-        super(Node, self).__init__(self, data):
+    def __init__(self, data = None, left = None, right = None):
+        super(BinaryNode, self).__init__(data)
         self._left = left
         self._right = right
 
     @property
     def left(self):
-        """"""
+        """The left property stores the left child node that is linked"""
         return self._left
 
     @left.setter
     def left(self, value):
-        """"""
         self._left = value
 
     @left.deleter
@@ -106,7 +104,7 @@ class BinaryNode(Node):
 
     @property
     def right(self):
-        """"""
+        """The right property stores the right child node that is linked"""
         return self._right
 
     @right.setter
@@ -121,13 +119,13 @@ class BinaryNode(Node):
 class BiBinaryNode(BinaryNode):
     """A bidirectional container class with two children"""
 
-    def __init__(self, data, left = None, right = None, parent = None):
-        super(BinaryNode, self).__init__(self, data, left, right)
+    def __init__(self, data = None, left = None, right = None, parent = None):
+        super(BiBinaryNode, self).__init__(data, left, right)
         self._parent = parent
 
-`   @property
+    @property
     def parent(self):
-        """"""
+        """The parent property stores the parent node that is linked"""
         return self._parent
 
     @parent.setter
@@ -142,13 +140,13 @@ class BiBinaryNode(BinaryNode):
 class MultiNode(Node):
     """A container class with any number of children"""
 
-    def __init__(self, data, children = set()):
-        super(Node, self).__init__(self, data)
+    def __init__(self, data = None, children = set()):
+        super(MultiNode, self).__init__(data)
         self._children = children
 
     @property
     def children(self):
-        """"""
+        """The children property stores a set of linked children"""
         return self._children
 
     @children.setter
@@ -163,9 +161,51 @@ class MultiNode(Node):
 class BiMultiNode(MultiNode):
     """A container class with any number of unordered children and parents"""
 
-    def __init__(self, data, children = set(), parents = set()):
-        super(MultiNode, self).__init__(self, data, children)
+    def __init__(self, data = None, children = set(), parents = set()):
+        super(BiMultiNode, self).__init__(data, children)
         self._parents = parents
+
+    @property
+    def parents(self):
+        """The parents property stores a set of linked parents"""
+        return self._parents
+
+    @parents.setter
+    def parents(self, value):
+        self._parents = value
+
+    @parents.deleter
+    def parents(self):
+        del self._parents
+        self._parents = set()
+
+class OrderedMultiNode(Node):
+    """A container class with any number of ordered children"""
+
+    def __init__(self, data = None, children = []):
+        super(OrderedMultiNode, self).__init__(data)
+        self._children = children
+
+    @property
+    def children(self):
+        """"""
+        return self._children
+
+    @children.setter
+    def children(self, value):
+        self._children = value
+
+    @children.deleter
+    def children(self):
+        del self._children
+        self._children = []
+
+class BiOrderedMultiNode(OrderedMultiNode):
+    """A bidirectional container class with any number of ordered children"""
+
+    def __init__(self, data = None, children = [], parents = []):
+        super(BiOrderedMultiNode, self).__init__(data, children)
+        self._parent = parents
 
     @property
     def parents(self):
@@ -175,28 +215,6 @@ class BiMultiNode(MultiNode):
     @parents.setter
     def parents(self, value):
         self._parents = value
-
-    @parents.deleter
-    def parents(self)
-        del self._parents
-        self._parents = set()
-
-class OrderedMultiNode(MulitNode):
-    """A container class with any number of ordered children"""
-
-    def __init__(self, data, children = [])
-        super(MultiNode, self).__init__(self, data, children)
-
-    @children.deleter
-    def children(self):
-        del self._children
-        self._children = []
-
-class BiOrderedMultiNode(BiMultiNode):
-    """A bidirectional container class with any number of ordered children"""
-
-    def __init__(self, data, children = [], parents = []):
-        super(BiMultiNode, self).__init__(self, data, children, parents)
 
     @parents.deleter
     def parents(self):
