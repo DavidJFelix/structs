@@ -20,9 +20,68 @@
 
 import nodes
 
-class BinaryTree(object):
+class BinaryTree(nodes.BiBinaryNode):
     """A tree data structure in which each node has at most two child nodes"""
-    pass
+
+    def insert(self):
+        pass
+
+    def __iter__(self):
+        """Recursively iterate in-order"""
+        try:
+            for each in self.left:
+                yield each
+
+        except(TypeError):
+            pass
+
+        yield self.data
+        try:
+            for each in self.right:
+                yield each
+
+        except(TypeError):
+            pass
+
+    def iter_in_order(self):
+        """Recursively iterate in-order.
+    Operates identically to __iter__(), but exists for calling consistancy"""
+        return self.__iter__()
+
+    def iter_pre_order(self):
+        """Recursively iterate pre-order"""
+        yield self.data
+        try:
+            for each in self.left:
+                yield each
+
+        except(TypeError):
+            pass
+
+        try:
+            for each in self.right:
+                yield each
+
+        except(TypeError):
+            pass
+            
+    def iter_post_order(self):
+        """Recursively iterate post-order"""
+        try:
+            for each in self.left:
+                yield each
+
+        except(TypeError):
+            pass
+
+        try:
+            for each in self.right:
+                yield each
+
+        except(TypeError):
+            pass
+
+        yield self.data
     
 class AATree(RedBlackTree):
     """A variation of the red-black tree in which red nodes can only be added to

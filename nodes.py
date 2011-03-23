@@ -19,7 +19,19 @@
 # with this program. If not, see <http://www.gnu.org/licenses/>.
 
 class Node(object):
-    """A container class which is used for creating complex data structures."""
+    """A container class which is used for creating complex data structures.
+    Node is not inteded for any specific purpose but to be inherited when
+    creating more complex classes.
+
+    Attributes:
+        _data:
+            where data is stored. Code and users should not interact with the
+            stored data this way, but should instead interact with the 'data'
+            propery.
+
+    Properties:
+        data:
+            how code interacts with the _data attribute."""
 
     def __init__(self, data = None):
         self._data = data
@@ -39,7 +51,14 @@ class Node(object):
         self._data = None
 
 class LinkedNode(Node):
-    """A container class with one child"""
+    """A container class with one child.
+    LinkedNode inherits Node and is the simplest container with an intended
+    purpose. LinkedNode has one child and can used to create unidirectional
+    chained containers, such as simple lists, queues or stacks.
+
+    Attributes:
+        _next:
+            where the next node is stored"""
 
     def __init__(self, data = None, next = None):
         super(LinkedNode, self).__init__(data)
@@ -52,7 +71,11 @@ class LinkedNode(Node):
 
     @next.setter
     def next(self, value):
-        self._data = value
+        if isinstance(value, Node):
+            self._data = value
+
+        else:
+            raise TypeError('next cannot be assigned to a non-Node-inherited type')
 
     @next.deleter
     def next(self):
@@ -73,11 +96,14 @@ class BiLinkedNode(LinkedNode):
 
     @prev.setter
     def prev(self, value):
-        self._prev = value
+        if isinstance(value, Node):
+            self._prev = value
+
+        else:
+            raise TypeError('prev cannot be assigned to a non-Node-inherited type')
 
     @prev.deleter
     def prev(self):
-        del self._prev
         self._prev = None
 
 class BinaryNode(Node):
@@ -95,11 +121,14 @@ class BinaryNode(Node):
 
     @left.setter
     def left(self, value):
-        self._left = value
+        if isinstance(value, Node):
+            self._left = value
+
+        else:
+            raise TypeError('left cannot be assigned to a non-Node-inherited type')
 
     @left.deleter
     def left(self):
-        del self._left
         self._left = None
 
     @property
@@ -109,11 +138,14 @@ class BinaryNode(Node):
 
     @right.setter
     def right(self, value):
-        self._right = value
+        if isinstance(value, Node):
+            self._right = value
+
+        else:
+            raise TypeError('right cannot be assigned to a non-Node-inherited type')
 
     @right.deleter
     def right(self):
-        del self._right
         self._right = None
 
 class BiBinaryNode(BinaryNode):
@@ -130,11 +162,14 @@ class BiBinaryNode(BinaryNode):
 
     @parent.setter
     def parent(self, value):
-        self._parent = value
+        if isinstance(value, Node):
+            self._parent = value
+
+        else:
+            raise TypeError('parent cannot be assigned to a non-Node-inherited type')
 
     @parent.deleter
     def parent(self):
-        del self._parent
         self._parent = None
 
 class MultiNode(Node):
@@ -155,7 +190,6 @@ class MultiNode(Node):
 
     @children.deleter
     def children(self):
-        del self._children
         self._children = set()
 
 class BiMultiNode(MultiNode):
@@ -176,7 +210,6 @@ class BiMultiNode(MultiNode):
 
     @parents.deleter
     def parents(self):
-        del self._parents
         self._parents = set()
 
 class OrderedMultiNode(Node):
@@ -197,7 +230,6 @@ class OrderedMultiNode(Node):
 
     @children.deleter
     def children(self):
-        del self._children
         self._children = []
 
 class BiOrderedMultiNode(OrderedMultiNode):
@@ -218,5 +250,4 @@ class BiOrderedMultiNode(OrderedMultiNode):
 
     @parents.deleter
     def parents(self):
-        del self._parents
         self._parents = []
