@@ -20,14 +20,17 @@
 
 import unittest
 from nodes import Node
+from random import randint
 
 class TestNode(unittest.TestCase):
     """"""
-    
 
     def setUp(self):
-        
-        
+        test_int = randint()
+        print('Testing with int: ', test_int)
+
+    def test_data(self):
+        pass
 
 if __name__ == '__main__':
     unittest.main()

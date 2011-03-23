@@ -19,7 +19,8 @@
 # with this program. If not, see <http://www.gnu.org/licenses/>.
 
 class Node(object):
-    """A container class which is used for creating complex data structures.
+    """
+    A container class which is used for creating complex data structures.
     Node is not inteded for any specific purpose but to be inherited when
     creating more complex classes.
 
@@ -31,7 +32,8 @@ class Node(object):
 
     Properties:
         data:
-            how code interacts with the _data attribute."""
+            how code and users interact with the _data attribute.
+    """
 
     def __init__(self, data = None):
         self._data = data
@@ -47,18 +49,25 @@ class Node(object):
 
     @data.deleter
     def data(self):
-        del self._data
         self._data = None
 
 class LinkedNode(Node):
-    """A container class with one child.
+    """
+    A container class with one child.
     LinkedNode inherits Node and is the simplest container with an intended
     purpose. LinkedNode has one child and can used to create unidirectional
     chained containers, such as simple lists, queues or stacks.
 
     Attributes:
         _next:
-            where the next node is stored"""
+            where the next node is stored. Code and users should not interact
+            with the stored next this way, but should instead interact with the 
+            'next' propery.
+
+    Properties:
+        next:
+            how code and users interact with the _next attribute.
+    """
 
     def __init__(self, data = None, next = None):
         super(LinkedNode, self).__init__(data)
@@ -79,14 +88,27 @@ class LinkedNode(Node):
 
     @next.deleter
     def next(self):
-        del self._next
         self._next = None
 
-class BiLinkedNode(LinkedNode):
-    """A bidirectional container class with one child"""
+class BinaryNode(LinkedNode):
+    """
+    A bidirectional container class with one child.
+    BiLinkedNode has two children and can be used to create bidirectional
+    chained containers, such as doubly-linked lists.
+
+    Attributes:
+        _prev:
+            where the previous node is stored. Code and users should not
+            interact with the stored previous this way, but should instead
+            interact with the 'prev' property.
+
+    Properties:
+        prev:
+            how code and users interact with the _prev attribute.
+    """
 
     def __init__(self, data = None, next = None, prev = None):
-        super(BiLinkedNode, self).__init__(data, next)
+        super(BinaryNode, self).__init__(data, next)
         self._prev = prev
 
     @property
@@ -105,48 +127,6 @@ class BiLinkedNode(LinkedNode):
     @prev.deleter
     def prev(self):
         self._prev = None
-
-class BinaryNode(Node):
-    """A container class with two children"""
-
-    def __init__(self, data = None, left = None, right = None):
-        super(BinaryNode, self).__init__(data)
-        self._left = left
-        self._right = right
-
-    @property
-    def left(self):
-        """The left property stores the left child node that is linked"""
-        return self._left
-
-    @left.setter
-    def left(self, value):
-        if isinstance(value, Node):
-            self._left = value
-
-        else:
-            raise TypeError('left cannot be assigned to a non-Node-inherited type')
-
-    @left.deleter
-    def left(self):
-        self._left = None
-
-    @property
-    def right(self):
-        """The right property stores the right child node that is linked"""
-        return self._right
-
-    @right.setter
-    def right(self, value):
-        if isinstance(value, Node):
-            self._right = value
-
-        else:
-            raise TypeError('right cannot be assigned to a non-Node-inherited type')
-
-    @right.deleter
-    def right(self):
-        self._right = None
 
 class BiBinaryNode(BinaryNode):
     """A bidirectional container class with two children"""
@@ -177,7 +157,11 @@ class MultiNode(Node):
 
     def __init__(self, data = None, children = set()):
         super(MultiNode, self).__init__(data)
-        self._children = children
+        if isinstance(children, set):
+            self._children = children
+
+        else:
+            raise TypeError('children must be of type "set"')
 
     @property
     def children(self):
@@ -186,7 +170,11 @@ class MultiNode(Node):
 
     @children.setter
     def children(self, value):
-        self._children = value
+        if (isinstance(value, set)) and (isinstance(each, Node) for each in value):
+            self._children = value
+
+        else:
+            raise TypeError('children must be of type "set" and each child must be a Node-inherited type')
 
     @children.deleter
     def children(self):
@@ -206,7 +194,11 @@ class BiMultiNode(MultiNode):
 
     @parents.setter
     def parents(self, value):
-        self._parents = value
+        if (isinstance(value, set) and (isinstance(each, Node) for each in value):
+            self._parents = value
+
+        else:
+            raise TypeError('parents must be of type "set" and each parent must be a Node-inherited type')
 
     @parents.deleter
     def parents(self):
