@@ -19,8 +19,7 @@
 # with this program. If not, see <http://www.gnu.org/licenses/>.
 
 class Node(object):
-    """
-    A container class which is used for creating complex data structures.
+    """A container class which is used for creating complex data structures.
     Node is not inteded for any specific purpose but to be inherited when
     creating more complex classes.
 
@@ -52,8 +51,7 @@ class Node(object):
         self._data = None
 
 class LinkedNode(Node):
-    """
-    A container class with one child.
+    """A container class with one child.
     LinkedNode inherits Node and is the simplest container with an intended
     purpose. LinkedNode has one child and can used to create unidirectional
     chained containers, such as simple lists, queues or stacks.
