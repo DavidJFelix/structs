@@ -1,7 +1,7 @@
 ﻿#!/usr/bin/env python3
 # -*- coding: UTF-8 -*-
 #
-#  structs/test_structs.py
+# structs/test_structs.py
 #
 # Copyright (C) 2011 David J Felix
 #
