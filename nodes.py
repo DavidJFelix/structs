@@ -377,7 +377,7 @@ class OrderedMultiNode(Node):
     @children.setter
     def children(self, value):
         if isinstance(value, list):
-            if self.are_nodes(value)
+            if self.are_nodes(value):
                 self._children = value
 
             else:
@@ -439,7 +439,7 @@ class BiOrderedMultiNode(OrderedMultiNode):
     @parents.setter
     def parents(self, value):
         if isinstance(value, list):
-            if self.are_nodes(value)
+            if self.are_nodes(value):
                 self._parents = value
 
             else:
