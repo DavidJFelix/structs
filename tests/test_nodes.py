@@ -37,3 +37,28 @@
 # 2.0, the LGPLv3+, the GPLv3+, the AGPLv3+ or the MPLv1.1+. A full copy of the
 # oldest allowable version of these licenses is available in the "licenses"
 # directory, which is located in the root directory of this project.
+
+import unittest
+
+class NodeTestCase(unittest.TestCase):
+    """A test case for the Node class.
+    """
+
+    def setUp(self):
+        self.node = Node()
+    
+    def tearDown(self):
+        del self.node
+
+def get_suite():
+    """
+    """
+
+    nodes_suite = unittest.TestSuite()
+    test_loader = nodes_suite.TestLoader()
+    test_loader.loadTestsFromTestCase(NodeTestCase)
+    return nodes_suite
+
+if __name__ == '__main__':
+    nodes_suite = get_suite()
+    unittest.TextTestRunner(verbosity = 2).run(nodes_suite)

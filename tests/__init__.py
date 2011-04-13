@@ -37,3 +37,11 @@
 # 2.0, the LGPLv3+, the GPLv3+, the AGPLv3+ or the MPLv1.1+. A full copy of the
 # oldest allowable version of these licenses is available in the "licenses"
 # directory, which is located in the root directory of this project.
+
+__all__ = ['test_graphs',
+           'test_hashes',
+           'test_linear',
+           'test_nodes',
+           'test_others',
+           'test_trees',
+           ]
