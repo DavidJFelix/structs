@@ -21,22 +21,24 @@
 # the License.
 #
 # Alternatively, the contents of this file may be used under the terms of 
-# the LGPLv3+ (the  "Lesser GNU General Public License version 3 or later"),
-# the GPLv3+ (the "GNU General Public License version 3 or later"),
-# the AGPLv3+ (the "Affero GNU General Public License version 3 or later"),
-# the MPLv1.1+ (the "Mozilla Public License version 1.1 or later"), in which
-# case the provisions of LGPLv3+, GPLv3+, AGPLv3+, or MPLv1.1+ are respectively
-# applicable instead of those above. If you wish to allow use of your version of
-# this file only under the terms of the LGPLv3+, GPLv3+, AGPLv3+ or MPLv1.1 and
-# not to allow others to use your version of this file under the Apache License,
-# Version 2.0 or another of the above licenses, indicate your decision by
-# deleting the provisions above and replace them with the notice and other
-# provisions required by the LGPLv3+, GPLv3+, AGPLv3+, or MPLv1.1+ respectively.
-# If you do not delete the provisions above, or modify this notice a recipient
-# may use your version of this file under either the Apache License, Version 
-# 2.0, the LGPLv3+, the GPLv3+, the AGPLv3+ or the MPLv1.1+. A full copy of the
-# oldest allowable version of these licenses is available in the "licenses"
-# directory, which is located in the root directory of this project.
+# the LGPLv2+ (the  "Lesser GNU General Public License version 2 or (at your
+# option) any later version"), the GPLv2+ (the "GNU General Public License 
+# version 2 or (at your option) any later version"), the AGPLv2+ (the "Affero
+# GNU General Public License version 2 or (at your option) any later version"),
+# the MPLv1.1+ (the "Mozilla Public License version 1.1 or (at your option) any
+# later version"), in which case the provisions of LGPLv2+, GPLv2+, AGPLv2+,
+# or MPLv1.1+ are respectively applicable instead of those above. If you wish to
+# allow use of your version of this file only under the terms of the LGPLv2+,
+# GPLv2+, AGPLv2+ or MPLv1.1 and not to allow others to use your version of this
+# file under the Apache License, Version 2.0 or another of the above licenses,
+# indicate your decision by deleting the provisions above and replace them with
+# the notice and other provisions required by the LGPLv2+, GPLv2+, AGPLv2+, or
+# MPLv1.1+ respectively. If you do not delete the provisions above, or modify
+# this notice a recipient may use your version of this file under either the
+# Apache License, Version  2.0, the LGPLv2+, the GPLv2+, the AGPLv2+ or the
+# MPLv1.1+. A full copy of all allowable version of these licenses (at the time
+# of this publication) is available in the "licenses" directory, which is
+# located in the root directory of this project.
 
 
 class Node(object):
@@ -55,7 +57,7 @@ class Node(object):
             how code and users interact with the _data attribute.
     """
 
-    node_err = 'linked nodes must be a Node-inherited type'
+    node_err = 'linked nodes must be a ' + str(self.__class__)
     def __init__(self, data = None):
         self._data = data
 
@@ -75,7 +77,7 @@ class Node(object):
     @staticmethod
     def are_nodes(iterable):
         for each in iterable:
-            if not isinstance(each, Node):
+            if not isinstance(each, self.__class__):
                 return False
 
         return True
@@ -106,8 +108,12 @@ class LinkedNode(Node):
     """
 
     def __init__(self, data = None, next = None):
-        super(LinkedNode, self).__init__(data)
-        self._next = next
+        super().__init__(data)
+        if next and isinstance(next, self.__class__):
+            self._next = next
+
+        else:
+            raise TypeError(self.node_err)
 
     @property
     def next(self):
@@ -160,8 +166,12 @@ class BinaryNode(LinkedNode):
     """
 
     def __init__(self, data = None, next = None, prev = None):
-        super(BinaryNode, self).__init__(data, next)
-        self._prev = prev
+        super().__init__(data, next)
+        if prev and isinstance(next, self.__class__):
+            self._prev = prev
+
+        else:
+            raise TypeError(self.node_err)
 
     @property
     def prev(self):
@@ -170,7 +180,7 @@ class BinaryNode(LinkedNode):
 
     @prev.setter
     def prev(self, value):
-        if isinstance(value, Node):
+        if isinstance(value, self.__class__):
             self._prev = value
 
         else:
@@ -221,9 +231,13 @@ class BiBinaryNode(BinaryNode):
             how code and users interact with the _parent attribute.
     """
 
-    def __init__(self, data = None, left = None, right = None, parent = None):
-        super(BiBinaryNode, self).__init__(data, left, right)
-        self._parent = parent
+    def __init__(self, data = None, next = None, prev = None, parent = None):
+        super().__init__(data, left, right)
+        if parent and isinstance(parent, self.__class__):
+            self._parent = parent
+
+        else:
+            raise TypeError(self.node_err)
 
     @property
     def parent(self):
@@ -268,10 +282,13 @@ class MultiNode(Node):
 
     set_err = 'must be of type "set"'
     def __init__(self, data = None, children = set()):
-        super(MultiNode, self).__init__(data)
+        super().__init__(data)
         if isinstance(children, set):
-            self._children = children
+            if self.are_nodes(children):
+                self._children = children
 
+            else:
+                raise TypeError(self.set_err)
         else:
             raise TypeError(self.set_err)
 
@@ -330,9 +347,13 @@ class BiMultiNode(MultiNode):
     """
 
     def __init__(self, data = None, children = set(), parents = set()):
-        super(BiMultiNode, self).__init__(data, children)
+        super().__init__(data, children)
         if isinstance(parents, set):
-            self._parents = parents
+            if self.are_nodes(parents):
+                self._parents = parents
+
+            else:
+                raise TypeError(self.node_err)
 
         else:
             raise TypeError(self.set_err)
@@ -383,9 +404,13 @@ class OrderedMultiNode(Node):
 
     list_err = 'must be of type "list"'
     def __init__(self, data = None, children = []):
-        super(OrderedMultiNode, self).__init__(data)
+        super().__init__(data)
         if isinstance(children, list):
-            self._children = children
+            if self.are_nodes(children):
+                self._children = children
+
+            else:
+                raise TypeError(self.node_err)
 
         else:
             raise TypeError(self.list_err)
@@ -445,9 +470,13 @@ class BiOrderedMultiNode(OrderedMultiNode):
     """
 
     def __init__(self, data = None, children = [], parents = []):
-        super(BiOrderedMultiNode, self).__init__(data, children)
+        super().__init__(data, children)
         if isinstance(parents, list):
-            self._parents = parents
+            if self.are_nodes(parents):
+                self._parents = parents
+
+            else:
+                raise TypeError(self.node_err)
 
         else:
             raise TypeError(self.list_err)
@@ -460,7 +489,7 @@ class BiOrderedMultiNode(OrderedMultiNode):
     @parents.setter
     def parents(self, value):
         if isinstance(value, list):
-            if self.are_nodes(value)
+            if self.are_nodes(value):
                 self._parents = value
 
             else:
@@ -472,3 +501,9 @@ class BiOrderedMultiNode(OrderedMultiNode):
     @parents.deleter
     def parents(self):
         self._parents = []
+
+if __name__ == '__main__':
+    from structs.tests import test_nodes
+    test_nodes.run_test()
+
+# FILE FLAGS: NOT FINALIZED, NEEDS TO BE TESTED

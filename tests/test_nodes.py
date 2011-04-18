@@ -21,22 +21,24 @@
 # the License.
 #
 # Alternatively, the contents of this file may be used under the terms of 
-# the LGPLv3+ (the  "Lesser GNU General Public License version 3 or later"),
-# the GPLv3+ (the "GNU General Public License version 3 or later"),
-# the AGPLv3+ (the "Affero GNU General Public License version 3 or later"),
-# the MPLv1.1+ (the "Mozilla Public License version 1.1 or later"), in which
-# case the provisions of LGPLv3+, GPLv3+, AGPLv3+, or MPLv1.1+ are respectively
-# applicable instead of those above. If you wish to allow use of your version of
-# this file only under the terms of the LGPLv3+, GPLv3+, AGPLv3+ or MPLv1.1 and
-# not to allow others to use your version of this file under the Apache License,
-# Version 2.0 or another of the above licenses, indicate your decision by
-# deleting the provisions above and replace them with the notice and other
-# provisions required by the LGPLv3+, GPLv3+, AGPLv3+, or MPLv1.1+ respectively.
-# If you do not delete the provisions above, or modify this notice a recipient
-# may use your version of this file under either the Apache License, Version 
-# 2.0, the LGPLv3+, the GPLv3+, the AGPLv3+ or the MPLv1.1+. A full copy of the
-# oldest allowable version of these licenses is available in the "licenses"
-# directory, which is located in the root directory of this project.
+# the LGPLv2+ (the  "Lesser GNU General Public License version 2 or (at your
+# option) any later version"), the GPLv2+ (the "GNU General Public License 
+# version 2 or (at your option) any later version"), the AGPLv2+ (the "Affero
+# GNU General Public License version 2 or (at your option) any later version"),
+# the MPLv1.1+ (the "Mozilla Public License version 1.1 or (at your option) any
+# later version"), in which case the provisions of LGPLv2+, GPLv2+, AGPLv2+,
+# or MPLv1.1+ are respectively applicable instead of those above. If you wish to
+# allow use of your version of this file only under the terms of the LGPLv2+,
+# GPLv2+, AGPLv2+ or MPLv1.1 and not to allow others to use your version of this
+# file under the Apache License, Version 2.0 or another of the above licenses,
+# indicate your decision by deleting the provisions above and replace them with
+# the notice and other provisions required by the LGPLv2+, GPLv2+, AGPLv2+, or
+# MPLv1.1+ respectively. If you do not delete the provisions above, or modify
+# this notice a recipient may use your version of this file under either the
+# Apache License, Version  2.0, the LGPLv2+, the GPLv2+, the AGPLv2+ or the
+# MPLv1.1+. A full copy of all allowable version of these licenses (at the time
+# of this publication) is available in the "licenses" directory, which is
+# located in the root directory of this project.
 
 import unittest
 
@@ -47,18 +49,34 @@ class NodeTestCase(unittest.TestCase):
     def setUp(self):
         self.node = Node()
     
+    def test_data(self):
+        # Ensure that _data is initialized as None
+        assertIsNone(self.node._data, '_data should be initialized as None')
+
+        # Ensure that get for data works initially
+        assertIsNone(self.node.data, 'getter for data should return None now')
+        
+        # Ensure that set for data works
+        self.node.data = 1
+        assertEqual(self.node._data, 1, '_data should be set when setting data')
+        assertEqual(self.node.data, 1, 'data should return value set above')
+    
     def tearDown(self):
         del self.node
 
-def get_suite():
+def get_test_suite():
+    """A function which generates a test suite for the nodes.py file.
     """
-    """
-
     nodes_suite = unittest.TestSuite()
     test_loader = nodes_suite.TestLoader()
     test_loader.loadTestsFromTestCase(NodeTestCase)
-    return nodes_suite
+    return nodes_test_suite
+
+def run_test():
+    nodes_test_suite = get_test_suite()
+    unittest.TextTestRunner(verbosity = 2).run(nodes_test_suite)
 
 if __name__ == '__main__':
-    nodes_suite = get_suite()
-    unittest.TextTestRunner(verbosity = 2).run(nodes_suite)
+    run_test()
+
+# FILE FLAGS: NOT FINALIZED, NEEDS TO BE TESTED, NEEDS MORE TEST CASES
