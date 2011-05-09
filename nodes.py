@@ -1,4 +1,4 @@
-﻿#!/usr/bin/env python3
+﻿#!/usr/bin/env python
 # -*- coding: UTF-8 -*-
 #
 # structs/nodes.py
@@ -59,7 +59,7 @@ class Node(object):
         self._data = None
 
     @staticmethod
-    def are_nodes(iterable):
+    def are_nodes(iterable):    #needs testing
         for each in iterable:
             if not isinstance(each, self.__class__):
                 return False
@@ -78,43 +78,43 @@ class LinkedNode(Node):
             stored data this way, but should instead interact with the 'data'
             propery.
 
-        _next:
-            where the next node is stored. Code and users should not interact
-            with the stored next this way, but should instead interact with the 
-            'next' propery.
+        _right:
+            where the right node is stored. Code and users should not interact
+            with the stored right this way, but should instead interact with the
+            'right' propery.
 
     Properties:
         data:
             how code and users interact with the _data attribute.
 
-        next:
-            how code and users interact with the _next attribute.
+        right:
+            how code and users interact with the _right attribute.
     """
 
-    def __init__(self, data = None, next = None):
+    def __init__(self, data = None, right = None):
         super().__init__(data)
-        if next and isinstance(next, self.__class__):
-            self._next = next
+        if right and isinstance(right, self.__class__):
+            self._right = right
 
         else:
             raise TypeError(self.node_err)
 
     @property
-    def next(self):
-        """The next property stores the next node that is linked"""
-        return self._next
+    def right(self):
+        """The right property stores the right node that is linked"""
+        return self._right
 
-    @next.setter
-    def next(self, value):
+    @right.setter
+    def right(self, value):
         if isinstance(value, Node):
-            self._next = value
+            self._right = value
 
         else:
             raise TypeError(self.node_err)
 
-    @next.deleter
-    def next(self):
-        self._next = None
+    @right.deleter
+    def right(self):
+        self._right = None
 
 class BinaryNode(LinkedNode):
     """A bidirectional container class with one child.
@@ -128,51 +128,51 @@ class BinaryNode(LinkedNode):
             stored data this way, but should instead interact with the 'data'
             propery.
 
-        _next:
-            where the next node is stored. Code and users should not interact
-            with the stored next this way, but should instead interact with the 
-            'next' propery.
+        _right:
+            where the right node is stored. Code and users should not interact
+            with the stored right this way, but should instead interact with the 
+            'right' propery.
 
-        _prev:
-            where the previous node is stored. Code and users should not
-            interact with the stored previous this way, but should instead
-            interact with the 'prev' property.
+        _left:
+            where the left node is stored. Code and users should not interact
+            with the stored left this way, but should instead interact with the
+            'left' property.
 
     Properties:
         data:
             how code and users interact with the _data attribute.
 
-        next:
-            how code and users interact with the _next attribute.
+        right:
+            how code and users interact with the _right attribute.
 
-        prev:
-            how code and users interact with the _prev attribute.
+        left:
+            how code and users interact with the _left attribute.
     """
 
-    def __init__(self, data = None, next = None, prev = None):
-        super().__init__(data, next)
-        if prev and isinstance(next, self.__class__):
-            self._prev = prev
+    def __init__(self, data = None, right = None, left = None):
+        super().__init__(data, right)
+        if left and isinstance(right, self.__class__):
+            self._left = left
 
         else:
             raise TypeError(self.node_err)
 
     @property
-    def prev(self):
-        """The prev property stores the previous node that is linked"""
-        return self._prev
+    def left(self):
+        """The left property stores the left node that is linked"""
+        return self._left
 
-    @prev.setter
-    def prev(self, value):
+    @left.setter
+    def left(self, value):
         if isinstance(value, self.__class__):
-            self._prev = value
+            self._left = value
 
         else:
             raise TypeError(self.node_err)
 
-    @prev.deleter
-    def prev(self):
-        self._prev = None
+    @left.deleter
+    def left(self):
+        self._left = None
 
 class BiBinaryNode(BinaryNode):
     """A bidirectional container class with two children.
@@ -185,15 +185,15 @@ class BiBinaryNode(BinaryNode):
             stored data this way, but should instead interact with the 'data'
             propery.
 
-        _next:
-            where the next node is stored. Code and users should not interact
-            with the stored next this way, but should instead interact with the 
-            'next' propery.
+        _right:
+            where the right node is stored. Code and users should not interact
+            with the stored right this way, but should instead interact with the 
+            'right' propery.
 
-        _prev:
-            where the previous node is stored. Code and users should not
-            interact with the stored previous this way, but should instead
-            interact with the 'prev' property.
+        _left:
+            where the left node is stored. Code and users should not interact
+            with the stored left this way, but should instead interact with the
+            'left' property.
 
 
         _parent:
@@ -205,17 +205,17 @@ class BiBinaryNode(BinaryNode):
         data:
             how code and users interact with the _data attribute.
 
-        next:
-            how code and users interact with the _next attribute.
+        right:
+            how code and users interact with the _right attribute.
 
-        prev:
-            how code and users interact with the _prev attribute.
+        left:
+            how code and users interact with the _left attribute.
 
         parent:
             how code and users interact with the _parent attribute.
     """
 
-    def __init__(self, data = None, next = None, prev = None, parent = None):
+    def __init__(self, data = None, right = None, left = None, parent = None):
         super().__init__(data, left, right)
         if parent and isinstance(parent, self.__class__):
             self._parent = parent
@@ -489,5 +489,3 @@ class BiOrderedMultiNode(OrderedMultiNode):
 if __name__ == '__main__':
     from structs.tests import test_nodes
     test_nodes.run_test()
-
-# FILE FLAGS: NOT FINALIZED, NEEDS TO BE TESTED
