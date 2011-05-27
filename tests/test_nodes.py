@@ -181,11 +181,13 @@ def get_test_suite():
     nodes_test_suite = unittest.TestSuite()
     test_loader = nodes_test_suite.TestLoader()
     test_loader.loadTestsFromTestCase(NodeTestCase)
+    test_loader.loadTestsFromTestCase(LinkedNodeTestCase)
     return nodes_test_suite
 
 def run_test():
     nodes_test_suite = get_test_suite()
-    unittest.TextTestRunner(verbosity = 2).run(nodes_test_suite)
+    tester = unittest.TextTestRunner(verbosity = 2)
+    tester.run(nodes_test_suite)
 
 if __name__ == '__main__':
     run_test()
