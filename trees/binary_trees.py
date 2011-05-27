@@ -1,4 +1,4 @@
-﻿#!/usr/bin/env python
+﻿#!/usr/bin/env python3
 # -*- coding: UTF-8 -*-
 #
 # structs/trees/binary_trees.py
@@ -32,7 +32,7 @@ class BinaryTree(nodes.BiBinaryNode):
 
     binary_tree_err = 'linked trees must be BinaryTree type'
     def __init__(self, data = None, parent = None):
-        super().__init__(data, next = None, prev = None, parent)
+        super().__init__(data, None, None, parent)
 
     def __iter__(self):
         return self
@@ -77,7 +77,8 @@ class BinaryTree(nodes.BiBinaryNode):
             for each in self.right.post_order():
                 yield each
 
-        return self.data #issue a StopIteration exception
+        yield self.data
+        return #issue a StopIteration exception
 
     def __len__(self):
         """A recurse function which determines the number of elements."""
@@ -112,7 +113,7 @@ class BinaryTree(nodes.BiBinaryNode):
     def __contains__(self, item):
         pass
 
-class AATree(RedBlackTree):
+'''class AATree(RedBlackTree):
     """A variation of the red-black tree in which red nodes can only be added to
 a right subchild"""
 
@@ -173,3 +174,4 @@ class VanEmdeBoasTree():
 
 class WeightBalancedTree():
     pass
+'''
