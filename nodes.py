@@ -41,8 +41,8 @@ class Node(object):
             how code and users interact with the _data attribute.
     """
 
-    node_err = 'linked nodes must be a ' + str(self.__class__)
     def __init__(self, data = None):
+        self.node_err = 'linked nodes must be a ' + str(self.__class__)
         self._data = data
 
     @property
@@ -59,7 +59,7 @@ class Node(object):
         self._data = None
 
     @staticmethod
-    def are_nodes(iterable):    #needs testing
+    def are_nodes(iterable):
         for each in iterable:
             if not isinstance(each, self.__class__):
                 return False
@@ -407,7 +407,7 @@ class OrderedMultiNode(Node):
     @children.setter
     def children(self, value):
         if isinstance(value, list):
-            if self.are_nodes(value)
+            if self.are_nodes(value):
                 self._children = value
 
             else:
