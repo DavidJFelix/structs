@@ -5,8 +5,6 @@
 #
 # Copyright (c) 2011 David J Felix
 #
-# Copyright (c) 2011 David J Felix
-#
 # MIT/X11 License
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -28,19 +26,35 @@
 # SOFTWARE.
 
 import unittest
-from tests import test_nodes
+from structs.tests import (test_graphs,
+                   test_hashes,
+                   test_ linear,
+                   test_nodes,
+                   test_other,
+                   test_trees,
+                  )
 
 def get_test_suite():
     """
     """
-    nodes_test_suite =  test_nodes.get_test_suite()
-    structs_test_suite = unittest.TestSuite([nodes_test_suite,
-                                            ])
+    graphs_test_suite = test_graphs.get_test_suite()
+    hashes_test_suite = test_hashes.get_test_suite()
+    linear_test_suite = test_linear.get_test_suite()
+    nodes_test_suite = test_nodes.get_test_suite()
+    other_test_suite = test_other.get_test_suite()
+    suite_list = [graphs_test_suite,
+                  hashes_test_suite,
+                  linear_test_suite,
+                  nodes_test_suite,
+                  other_test_suite,
+                 ]
+    structs_test_suite = unittest.TestSuite(suite_list)
     return structs_test_suite
 
 def run_test()
     structs_test_suite = get_test_suite()
-    unittest.TextTestRunner(verbosity = 2).run(structs_test_suite)
+    tester = unittest.TextTestRunner(verbosity = 2)
+    tester.run(structs_test_suite)
     
 if __name__ == '__main__':
     run_test()
