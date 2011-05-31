@@ -33,7 +33,10 @@ class NodeTestCase(unittest.TestCase):
     This test case tests different elements of Node for expected behaviors.
     These tests are interdependant, and any test failure that this test does not
     account as less important could possibly indicate flawed test results for
-    other passed (or failed) tests in this case.
+    other passed (or failed) tests in this case. The tests that this case runs
+    are for the functioning of the "data" attribute of the Node, as this is all
+    that Node has; Since all other types of Nodes inherit from this Node, all
+    other test cases should inherit this test case directly or through a parent.
     """
 
     def setUp(self):
@@ -135,10 +138,16 @@ class NodeTestCase(unittest.TestCase):
                         )
 
     def tearDown(self):
-        del self.test_obj
+        del self.test_obj_empty
+        del self.test_obj_full
 
 class LinkedNodeTestCase(NodeTestCase):
     """A test case for the LinkedNode class.
+    These tests are interdependant, and any test failure that this test does not
+    account as less important could possibly indicate flawed test results for
+    other passed (or failed) tests in this case. This test case inherits
+    NodeTestCase to test the functionality of data, but adds to the case by
+    testing the functionality of "right"
     """
 
     def setUp(self):
@@ -148,7 +157,8 @@ class LinkedNodeTestCase(NodeTestCase):
     def test_right(self):
         # Ensure that _right is initialized as None
         self.assertIsNone(self.test_obj._right,
-                    'data should be initialized as None')
+                          'data should be initialized as None',
+                         )
 
         # Ensure that get for right works initially
         self.assertIsNone(self.test_obj.right,
@@ -174,6 +184,14 @@ class LinkedNodeTestCase(NodeTestCase):
 
         # Ensure that set does NOT work for non-Node types
         self.assertRaisesself.test_obj.right = 1
+
+class BinaryNodeTestCase(LinkedNodeTestCase):
+    """
+    """
+
+    def setUp(self):
+        self.test_obj_empty = nodes.BinaryNode()
+        self.test_obj_full = nodes.BinaryNode(1)
 
 def get_test_suite():
     """A function which generates a test suite for the nodes.py file.

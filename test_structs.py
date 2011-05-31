@@ -37,6 +37,7 @@ from structs.tests import (test_graphs,
 def get_test_suite():
     """
     """
+
     graphs_test_suite = test_graphs.get_test_suite()
     hashes_test_suite = test_hashes.get_test_suite()
     linear_test_suite = test_linear.get_test_suite()

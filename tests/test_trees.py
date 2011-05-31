@@ -39,6 +39,7 @@ from structs.trees.tests import (test_b_trees,
 def get_test_suite():
     """
     """
+
     b_trees_test_suite = test_b_trees.get_test_suite()
     binary_tress_test_suite = test_binary_trees.get_test_suite()
     heaps_test_suite = test_heaps.get_test_suite()

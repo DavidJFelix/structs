@@ -64,7 +64,7 @@ class BinaryTree(nodes.BiBinaryNode):
             for each in self.right.pre_order():
                 yield each
 
-        return #issue a StopIteration exception
+        raise StopIteration
 
     def post_order(self):
         """A recursive function used for post-order iteration"""
@@ -78,7 +78,7 @@ class BinaryTree(nodes.BiBinaryNode):
                 yield each
 
         yield self.data
-        return #issue a StopIteration exception
+        raise StopIteration
 
     def __len__(self):
         """A recurse function which determines the number of elements."""
