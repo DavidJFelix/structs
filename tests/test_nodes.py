@@ -49,7 +49,8 @@ class NodeTestCase(unittest.TestCase):
         data get method correctly returns the value stored in data. This test
         also checks that set values on can be gotten properly. This portion of
         the test overlaps part of test_data_set's test. Half of this test relies
-        on a functioning set data method to return correct test results."""
+        on a functioning set data method to return correct test results.
+        """
 
         self.assertIsNone(self.test_obj_empty._data,
                           '_data should be initialized as None',
@@ -89,7 +90,8 @@ class NodeTestCase(unittest.TestCase):
         """Test set techniques for data explicitly.
         This test will check that _data is properly set by invoking data's set
         method. This test relies on a properly functioning get method, and may
-        return false passes if test_data_get has failed before it."""
+        return false passes if test_data_get has failed before it.
+        """
 
         # Properly set data test
         self.test_obj_empty.data = 2
@@ -112,7 +114,10 @@ class NodeTestCase(unittest.TestCase):
                         )
 
     def test_data_set_fail(self):
-        """Test that set for data fails when done improperly."""
+        """Test that set for data fails when done improperly.
+        This tests the way that data is handled when an inpropper attempt is
+        made to change it.
+        """
 
         # Improperly set data test
         with self.assertRaises(AttributeError):
@@ -147,51 +152,223 @@ class LinkedNodeTestCase(NodeTestCase):
     account as less important could possibly indicate flawed test results for
     other passed (or failed) tests in this case. This test case inherits
     NodeTestCase to test the functionality of data, but adds to the case by
-    testing the functionality of "right"
+    testing the functionality of "right".
     """
 
     def setUp(self):
         self.test_obj_empty = nodes.LinkedNode()
         self.test_obj_full = nodes.LinkedNode(1)
 
-    def test_right(self):
-        # Ensure that _right is initialized as None
-        self.assertIsNone(self.test_obj._right,
-                          'data should be initialized as None',
+    def test_right_get(self):
+        """Test get techniques for right explicitly. Implicitly test __init__.
+        This test will check that _right is properly by __init__ and that the
+        right get method correctly returns the value stored in right. This test
+        also checks that set values on can be gotten properly. This portion of
+        the test overlaps part of test_right_set's test. Half of this test
+        relies on a functioning set right method to return correct test results.
+        """
+
+        self.assertIsNone(self.test_obj_empty._right,
+                          '_right should be initialized as None',
                          )
+        self.assertEqual(self.test_obj_empty.right,
+                         self.test_obj_empty._right,
+                         'getter for right should return same value as _right',
+                        )
+        self.assertEqual(self.test_obj_full._right,
+                         1,
+                         '_right should be initialized as 1',
+                        )
+        self.assertEqual(self.test_obj_full.right,
+                         self.test_obj_full._right,
+                        'getter for right should return same value as _right',
+                        )
+        self.test_obj_empty.right = 2
+        self.test_obj_full.right = 2
+        self.assertEqual(self.test_obj_empty._right,
+                         2,
+                         '_right was set to 2 and should now return 2',
+                        )
+        self.assertEqual(self.test_obj_empty.right,
+                         self.test_obj_empty._right,
+                         'getter for right should return same value as _right',
+                        )
+        self.assertEqual(self.test_obj_full.right,
+                         2,
+                         '_right was set to 2 and should now return 2',
+                        )
+        self.assertEqual(self.test_obj_full.right,
+                         self.test_obj_full._right,
+                         'getter for right should return same value as _right',
+                        )
 
-        # Ensure that get for right works initially
-        self.assertIsNone(self.test_obj.right,
-                    'getter for data should return None now')
+    def test_right_set(self):
+        """Test set techniques for right explicitly.
+        This test will check that _right is properly set by invoking right's set
+        method. This test relies on a properly functioning get method, and may
+        return false passes if test_right_get has failed before it.
+        """
 
-        # Ensure that set for right works for LinkedNode
-        self.test_obj.right = self.linked_node
-        self.assertEqual(self.test_obj._right,
-                    self.linked_node,
-                    '_right should be set when setting right')
-        self.assertEqual(self.test_obj.right,
-                    self.linked_node,
-                    'right should return value set above')
+        # Properly set right test
+        self.test_obj_empty.right = 2
+        self.test_obj_full.right = 2
+        self.assertEqual(self.test_obj_empty._right,
+                         2,
+                         '_right should have been set to 2',
+                        )
+        self.assertEqual(self.test_obj_empty.right,
+                         2,
+                         'right should return a 2 after being set to 2',
+                        )
+        self.assertEqual(self.test_obj_full._right,
+                         2,
+                         '_right should have been set to 2',
+                        )
+        self.assertEqual(self.test_obj_full.right,
+                         2,
+                         'right should return a 2 after being set to 2',
+                        )
 
-        # Ensure that set for right works for other Nodes
-        self.test_obj.right = self.node
-        self.assertEqual(self.test_obj._right,
-                    self.node,
-                    '_right should be set when setting right')
-        self.assertEqual(self.test_obj.right,
-                    self.node,
-                    'right should return value set above')
+    def test_right_set_fail(self):
+        """Test that set for right fails when done improperly.
+        This tests the way that right is handled when an inpropper attempt is
+        made to change it.
+        """
 
-        # Ensure that set does NOT work for non-Node types
-        self.assertRaisesself.test_obj.right = 1
+        # Improperly set right test
+        with self.assertRaises(AttributeError):
+            self.test_obj_empty._right = 2
+
+        with self.assertRaises(AttributeError):
+            self.test_obj_full._right = 2
+
+        self.assertIsNone(self.test_obj_empty._right,
+                          '_right should not have been set to 2',
+                         )
+        self.assertEqual(self.test_obj_empty.right,
+                         self.test_obj_empty._right,
+                         'right should not return a 2 after not being set to 2',
+                        )
+        self.assertEqual(self.test_obj_full._right,
+                         1,
+                         '_right should have not been set to 2',
+                        )
+        self.assertEqual(self.test_obj_full.right,
+                         self.test_obj_full._right,
+                         'right should not return a 2 after not being set to 2',
+                        )
 
 class BinaryNodeTestCase(LinkedNodeTestCase):
-    """
+    """A test case for the BinaryNode class.
+    These tests are interdependant, and any test failure that this test does not
+    account as less important could possibly indicate flawed test results for
+    other passed (or failed) tests in this case. This test case inherits
+    LinkedNodeTestCase to test the functionality of data and right, but adds to
+    the case by testing the functionality of "left".
     """
 
     def setUp(self):
         self.test_obj_empty = nodes.BinaryNode()
         self.test_obj_full = nodes.BinaryNode(1)
+
+    def test_left_get(self):
+        """Test get techniques for left explicitly. Implicitly test __init__.
+        This test will check that _left is properly by __init__ and that the
+        left get method correctly returns the value stored in left. This test
+        also checks that set values on can be gotten properly. This portion of
+        the test overlaps part of test_left_set's test. Half of this test
+        relies on a functioning set left method to return correct test results.
+        """
+
+        self.assertIsNone(self.test_obj_empty._left,
+                          '_left should be initialized as None',
+                         )
+        self.assertEqual(self.test_obj_empty.left,
+                         self.test_obj_empty._left,
+                         'getter for left should return same value as _left',
+                        )
+        self.assertEqual(self.test_obj_full._left,
+                         1,
+                         '_left should be initialized as 1',
+                        )
+        self.assertEqual(self.test_obj_full.left,
+                         self.test_obj_full._left,
+                        'getter for left should return same value as _left',
+                        )
+        self.test_obj_empty.left = 2
+        self.test_obj_full.left = 2
+        self.assertEqual(self.test_obj_empty._left,
+                         2,
+                         '_left was set to 2 and should now return 2',
+                        )
+        self.assertEqual(self.test_obj_empty.left,
+                         self.test_obj_empty._left,
+                         'getter for left should return same value as _left',
+                        )
+        self.assertEqual(self.test_obj_full.left,
+                         2,
+                         '_left was set to 2 and should now return 2',
+                        )
+        self.assertEqual(self.test_obj_full.left,
+                         self.test_obj_full._left,
+                         'getter for left should return same value as _left',
+                        )
+
+    def test_left_set(self):
+        """Test set techniques for left explicitly.
+        This test will check that _left is properly set by invoking left's set
+        method. This test relies on a properly functioning get method, and may
+        return false passes if test_left_get has failed before it.
+        """
+
+        # Properly set left test
+        self.test_obj_empty.left = 2
+        self.test_obj_full.left = 2
+        self.assertEqual(self.test_obj_empty._left,
+                         2,
+                         '_left should have been set to 2',
+                        )
+        self.assertEqual(self.test_obj_empty.left,
+                         2,
+                         'left should return a 2 after being set to 2',
+                        )
+        self.assertEqual(self.test_obj_full._left,
+                         2,
+                         '_left should have been set to 2',
+                        )
+        self.assertEqual(self.test_obj_full.left,
+                         2,
+                         'left should return a 2 after being set to 2',
+                        )
+
+    def test_left_set_fail(self):
+        """Test that set for left fails when done improperly.
+        This tests the way that left is handled when an inpropper attempt is
+        made to change it.
+        """
+
+        # Improperly set left test
+        with self.assertRaises(AttributeError):
+            self.test_obj_empty._data = 2
+
+        with self.assertRaises(AttributeError):
+            self.test_obj_full._data = 2
+
+        self.assertIsNone(self.test_obj_empty._data,
+                          '_data should not have been set to 2',
+                         )
+        self.assertEqual(self.test_obj_empty.data,
+                         self.test_obj_empty._data,
+                         'left should not return a 2 after not being set to 2',
+                        )
+        self.assertEqual(self.test_obj_full._left,
+                         1,
+                         '_left should have not been set to 2',
+                        )
+        self.assertEqual(self.test_obj_full.left,
+                         self.test_obj_full._left,
+                         'left should not return a 2 after not being set to 2',
+                        )
 
 def get_test_suite():
     """A function which generates a test suite for the nodes.py file.
