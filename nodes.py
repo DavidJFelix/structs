@@ -240,6 +240,9 @@ class BiBinaryNode(BinaryNode):
     def parent(self):
         self._parent = None
 
+# Alais BiBinaryNode by another familiar name, TrinaryNode
+TrinaryNode = BiBinaryNode
+
 class MultiNode(Node):
     """A container class with any number of children.
     Multinode has a set containing its children and can be used to create
