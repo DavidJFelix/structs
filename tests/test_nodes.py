@@ -349,16 +349,16 @@ class BinaryNodeTestCase(LinkedNodeTestCase):
 
         # Improperly set left test
         with self.assertRaises(AttributeError):
-            self.test_obj_empty._data = 2
+            self.test_obj_empty._left = 2
 
         with self.assertRaises(AttributeError):
-            self.test_obj_full._data = 2
+            self.test_obj_full._left = 2
 
-        self.assertIsNone(self.test_obj_empty._data,
-                          '_data should not have been set to 2',
+        self.assertIsNone(self.test_obj_empty._left,
+                          '_left should not have been set to 2',
                          )
-        self.assertEqual(self.test_obj_empty.data,
-                         self.test_obj_empty._data,
+        self.assertEqual(self.test_obj_empty.left,
+                         self.test_obj_empty._left,
                          'left should not return a 2 after not being set to 2',
                         )
         self.assertEqual(self.test_obj_full._left,
@@ -369,6 +369,129 @@ class BinaryNodeTestCase(LinkedNodeTestCase):
                          self.test_obj_full._left,
                          'left should not return a 2 after not being set to 2',
                         )
+
+class BiBinaryNodeTestCase(BinaryNodeTestCase):
+    """A test case for the BiBinaryNode class.
+    These tests are interdependant, and any test failure that this test does not
+    account as less important could possibly indicate flawed test results for
+    other passed (or failed) tests in this case. This test case inherits
+    BinaryNodeTestCase to test the functionality of data, right and left, but
+    adds to the case by testing the functionality of "parent".
+    """
+
+    def setUp(self):
+        self.test_obj_empty = nodes.BiBinaryNode()
+        self.test_obj_full = nodes.BiBinaryNode(1)
+
+    def test_parent_get(self):
+        """Test get techniques for parent explicitly. Implicitly test __init__.
+        This test will check that _parent is properly by __init__ and that the
+        parent get method correctly returns the value stored in parent. This
+        test also checks that set values on can be gotten properly. This portion
+        of the test overlaps part of test_parent_set's test. Half of this test
+        relies on a functioning set parent method to return correct test
+        results.
+        """
+
+        self.assertIsNone(self.test_obj_empty._parent,
+                          '_parent should be initialized as None',
+                         )
+        self.assertEqual(self.test_obj_empty.parent,
+                         self.test_obj_empty._parent,
+                         'getter for parent should return same value as _parent',
+                        )
+        self.assertEqual(self.test_obj_full._parent,
+                         1,
+                         '_parent should be initialized as 1',
+                        )
+        self.assertEqual(self.test_obj_full.parent,
+                         self.test_obj_full._parent,
+                        'getter for parent should return same value as _parent',
+                        )
+        self.test_obj_empty.parent = 2
+        self.test_obj_full.parent = 2
+        self.assertEqual(self.test_obj_empty._parent,
+                         2,
+                         '_parent was set to 2 and should now return 2',
+                        )
+        self.assertEqual(self.test_obj_empty.parent,
+                         self.test_obj_empty._parent,
+                         'getter for parent should return same value as _parent',
+                        )
+        self.assertEqual(self.test_obj_full.parent,
+                         2,
+                         '_parent was set to 2 and should now return 2',
+                        )
+        self.assertEqual(self.test_obj_full.parent,
+                         self.test_obj_full._parent,
+                         'getter for parent should return same value as _parent',
+                        )
+
+    def test_parent_set(self):
+        """Test set techniques for parent explicitly.
+        This test will check that _parent is properly set by invoking parent's
+        set method. This test relies on a properly functioning get method, and
+        may return false passes if test_parent_get has failed before it.
+        """
+
+        # Properly set parent test
+        self.test_obj_empty.parent = 2
+        self.test_obj_full.parent = 2
+        self.assertEqual(self.test_obj_empty._parent,
+                         2,
+                         '_parent should have been set to 2',
+                        )
+        self.assertEqual(self.test_obj_empty.parent,
+                         2,
+                         'parent should return a 2 after being set to 2',
+                        )
+        self.assertEqual(self.test_obj_full._parent,
+                         2,
+                         '_parent should have been set to 2',
+                        )
+        self.assertEqual(self.test_obj_full.parent,
+                         2,
+                         'parent should return a 2 after being set to 2',
+                        )
+
+    def test_parent_set_fail(self):
+        """Test that set for parent fails when done improperly.
+        This tests the way that parent is handled when an inpropper attempt is
+        made to change it.
+        """
+
+        # Improperly set parent test
+        with self.assertRaises(AttributeError):
+            self.test_obj_empty._parent = 2
+
+        with self.assertRaises(AttributeError):
+            self.test_obj_full._parent = 2
+
+        self.assertIsNone(self.test_obj_empty._parent,
+                          '_parent should not have been set to 2',
+                         )
+        self.assertEqual(self.test_obj_empty.parent,
+                         self.test_obj_empty._parent,
+                         'parent should not return a 2 after not being set to 2',
+                        )
+        self.assertEqual(self.test_obj_full._parent,
+                         1,
+                         '_parent should have not been set to 2',
+                        )
+        self.assertEqual(self.test_obj_full.parent,
+                         self.test_obj_full._parent,
+                         'parent should not return a 2 after not being set to 2',
+                        )
+
+class TrinaryNodeTestCase(BiBinaryNodeTestCase):
+    """A test case for the TrinaryNode class.
+    This test should be identical to the BiBinaryNodeTestCase because
+    TrinaryNode is an alias for BiBinaryNode. This test case just ensures that
+    the alias is functioning correctly."""
+
+    def setUp(self):
+        self.test_obj_empty = nodes.TrinaryNode()
+        self.test_obj_full = nodes.TrinaryNode(1)
 
 def get_test_suite():
     """A function which generates a test suite for the nodes.py file.
