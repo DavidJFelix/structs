@@ -31,7 +31,7 @@ from structs import nodes
 class NodeTestCase(unittest.TestCase):
     """A test case for the Node class.
     This test case tests different elements of Node for expected behaviors.
-    These tests are interdependant, and any test failure that this test does not
+    These tests are interdependent and any test failure that this test does not
     account as less important could possibly indicate flawed test results for
     other passed (or failed) tests in this case. The tests that this case runs
     are for the functioning of the "data" attribute of the Node, as this is all
@@ -52,6 +52,7 @@ class NodeTestCase(unittest.TestCase):
         on a functioning set data method to return correct test results.
         """
 
+        # Check initialized data for test_obj_empty
         self.assertIsNone(self.test_obj_empty._data,
                           '_data should be initialized as None',
                          )
@@ -59,6 +60,8 @@ class NodeTestCase(unittest.TestCase):
                          self.test_obj_empty._data,
                          'getter for data should return same value as _data',
                         )
+
+        # Check initialized data for test_obj_full
         self.assertEqual(self.test_obj_full._data,
                          1,
                          '_data should be initialized as 1',
@@ -67,8 +70,13 @@ class NodeTestCase(unittest.TestCase):
                          self.test_obj_full._data,
                         'getter for data should return same value as _data',
                         )
+
+        # Change the values of data to check that get retrives the new values
+        # Tests below here are dependent on a working set function for data
         self.test_obj_empty.data = 2
         self.test_obj_full.data = 2
+
+        # Check data of test_obj_empty again
         self.assertEqual(self.test_obj_empty._data,
                          2,
                          '_data was set to 2 and should now return 2',
@@ -77,6 +85,8 @@ class NodeTestCase(unittest.TestCase):
                          self.test_obj_empty._data,
                          'getter for data should return same value as _data',
                         )
+
+        # Check data of test_obj_full again
         self.assertEqual(self.test_obj_full.data,
                          2,
                          '_data was set to 2 and should now return 2',
@@ -96,6 +106,9 @@ class NodeTestCase(unittest.TestCase):
         # Properly set data test
         self.test_obj_empty.data = 2
         self.test_obj_full.data = 2
+
+        # Tests below here are dependent on a working get function for data
+        # Check data of test_obj_empty for new values
         self.assertEqual(self.test_obj_empty._data,
                          2,
                          '_data should have been set to 2',
@@ -104,6 +117,8 @@ class NodeTestCase(unittest.TestCase):
                          2,
                          'data should return a 2 after being set to 2',
                         )
+
+        # Check data of test_obj_full for new values
         self.assertEqual(self.test_obj_full._data,
                          2,
                          '_data should have been set to 2',
@@ -119,13 +134,15 @@ class NodeTestCase(unittest.TestCase):
         made to change it.
         """
 
-        # Improperly set data test
+        # Improperly set data test while testing for expected exceptions
         with self.assertRaises(AttributeError):
             self.test_obj_empty._data = 2
 
         with self.assertRaises(AttributeError):
             self.test_obj_full._data = 2
 
+        # Tests below here are dependent on a working get function for data
+        # Check data of test_obj_empty for no change
         self.assertIsNone(self.test_obj_empty._data,
                           '_data should not have been set to 2',
                          )
@@ -133,6 +150,8 @@ class NodeTestCase(unittest.TestCase):
                          self.test_obj_empty._data,
                          'data should not return a 2 after not being set to 2',
                         )
+
+        # Check data of test_obj_full for no change
         self.assertEqual(self.test_obj_full._data,
                          1,
                          '_data should have not been set to 2',
@@ -142,13 +161,53 @@ class NodeTestCase(unittest.TestCase):
                          'data should not return a 2 after not being set to 2',
                         )
 
+    def test_are_nodes(self):
+        """Test for the are_nodes() static method.
+        This tests that the are_nodes() function is correctly identifying lists
+        that are entirely composed of nodes
+        """
+
+        # Create a few lists of different compositions to test with
+        node_list = [self.test_obj_empty, self.test_obj_full]
+        mixed_list = [self.test_obj_empty, 1]
+        int_list = [1, 2]
+
+        # Test both existing nodes' are_nodes() using a list of entirely nodes
+        self.assertTrue(self.test_obj_empty.are_nodes(node_list),
+                        'A list of nodes passed to are_nodes() should return True',
+                       )
+        self.assertTrue(self.test_obj_full.are_nodes(node_list),
+                        'A list of nodes passed to are_nodes() should return True',
+                       )
+
+        # Test both existing nodes' are_nodes() using a mixed list
+        self.assertFalse(self.test_obj_empty.are_nodes(mixed_list),
+                         'A mixed list of nodes and non-nodes passed to are_nodes() should return False',
+                        )
+        self.assertFalse(self.test_obj_full.are_nodes(mixed_list),
+                         'A mixed list of nodes and non-nodes passed to are_nodes() should return False',
+                        )
+
+        # Test both existing nodes' are_nodes() using a list of entirely ints
+        self.assertFalse(self.test_obj_empty.are_nodes(int_list),
+                         'A list of ints passed to are_nodes() should return False',
+                        }
+        self.assertFalse(self.test_obj_full.are_nodes(int_list),
+                         'A list of ints passed to are_nodes() should return False',
+                        }
+
     def tearDown(self):
+        """The unittest tearDown function for this test case.
+        This function will clean up between each test of the case to ensure
+        encapsulated tests. Most inheriting test cases should leave this
+        unchanged, or at the very least call super() on it.
+        """
         del self.test_obj_empty
         del self.test_obj_full
 
 class LinkedNodeTestCase(NodeTestCase):
     """A test case for the LinkedNode class.
-    These tests are interdependant, and any test failure that this test does not
+    These tests are interdependent and any test failure that this test does not
     account as less important could possibly indicate flawed test results for
     other passed (or failed) tests in this case. This test case inherits
     NodeTestCase to test the functionality of data, but adds to the case by
@@ -157,7 +216,7 @@ class LinkedNodeTestCase(NodeTestCase):
 
     def setUp(self):
         self.test_obj_empty = nodes.LinkedNode()
-        self.test_obj_full = nodes.LinkedNode(1)
+        self.test_obj_full = nodes.LinkedNode(1, self.test_obj_empty)
 
     def test_right_get(self):
         """Test get techniques for right explicitly. Implicitly test __init__.
@@ -168,6 +227,7 @@ class LinkedNodeTestCase(NodeTestCase):
         relies on a functioning set right method to return correct test results.
         """
 
+        # Check initialized right of test_obj_empty
         self.assertIsNone(self.test_obj_empty._right,
                           '_right should be initialized as None',
                          )
@@ -175,27 +235,35 @@ class LinkedNodeTestCase(NodeTestCase):
                          self.test_obj_empty._right,
                          'getter for right should return same value as _right',
                         )
+
+        # Check initialized right of test_obj_full
         self.assertEqual(self.test_obj_full._right,
-                         1,
-                         '_right should be initialized as 1',
+                         self.test_obj_empty,
+                         '_right should be initialized as test_obj_full',
                         )
         self.assertEqual(self.test_obj_full.right,
                          self.test_obj_full._right,
                         'getter for right should return same value as _right',
                         )
-        self.test_obj_empty.right = 2
-        self.test_obj_full.right = 2
+
+        # Change the values to of right check that get retrieves the new values
+        # Tests below here are dependent on a working set function for right
+        self.test_obj_empty.right = self.test_obj_full
+        del self.test_obj_full.right
+
+        # Check right of test_obj_empty again
         self.assertEqual(self.test_obj_empty._right,
-                         2,
-                         '_right was set to 2 and should now return 2',
+                         self.test_obj_full,
+                         '_right was set to test_obj_full and should now return test_obj_full',
                         )
         self.assertEqual(self.test_obj_empty.right,
                          self.test_obj_empty._right,
                          'getter for right should return same value as _right',
                         )
-        self.assertEqual(self.test_obj_full.right,
-                         2,
-                         '_right was set to 2 and should now return 2',
+
+        # Check right of test_obj_full again
+        self.assertNone(self.test_obj_full.right,
+                         '_right was deleted and should now return None',
                         )
         self.assertEqual(self.test_obj_full.right,
                          self.test_obj_full._right,
@@ -260,7 +328,7 @@ class LinkedNodeTestCase(NodeTestCase):
 
 class BinaryNodeTestCase(LinkedNodeTestCase):
     """A test case for the BinaryNode class.
-    These tests are interdependant, and any test failure that this test does not
+    These tests are interdependent and any test failure that this test does not
     account as less important could possibly indicate flawed test results for
     other passed (or failed) tests in this case. This test case inherits
     LinkedNodeTestCase to test the functionality of data and right, but adds to
@@ -372,7 +440,7 @@ class BinaryNodeTestCase(LinkedNodeTestCase):
 
 class BiBinaryNodeTestCase(BinaryNodeTestCase):
     """A test case for the BiBinaryNode class.
-    These tests are interdependant, and any test failure that this test does not
+    These tests are interdependent and any test failure that this test does not
     account as less important could possibly indicate flawed test results for
     other passed (or failed) tests in this case. This test case inherits
     BinaryNodeTestCase to test the functionality of data, right and left, but
@@ -492,6 +560,52 @@ class TrinaryNodeTestCase(BiBinaryNodeTestCase):
     def setUp(self):
         self.test_obj_empty = nodes.TrinaryNode()
         self.test_obj_full = nodes.TrinaryNode(1)
+
+class MultiNodeTestCase(NodeTestCase):
+    """A test case fot the MultiNode class.
+    These tests are interdependent and any test failure that this test does not
+    account as less important could possibly indicate flawed test results for
+    other passed (or faild) tests in this case. This test case inherits
+    NodeTestCase to test the functionality of data, but adds to the case by
+    testing the functionality of "children".
+    """
+
+    def setUp(self):
+        self.test_obj_empty = nodes.MultiNode()
+        self.test_obj_full = nodes.MultiNode(1)
+
+    def test_children_get(self):
+        pass
+
+    def test_children_set(self):
+        pass
+
+    def test_children_set_fail(self):
+        pass
+
+class BiMultiNodeTestCase(MultiNodeTestCase):
+    """
+    """
+
+    def setUp(self):
+        self.test_obj_empty = nodes.BiMultiNode()
+        self.test_obj_full = nodes.BiMultiNode(1)
+
+class OrderedMultiNodeTestCase(NodeTestCase):
+    """
+    """
+
+    def setUp(self):
+        self.test_obj_empty = nodes.OrderedMultiNode()
+        self.test_obj_full = nodes.OrderedMultiNode(1)
+
+class BiOrderedMultiNodeTestCase(OrderedMultiNodeTestCase):
+    """
+    """
+
+    def setUp(self):
+        self.test_obj_empty = nodes.BiOrderedMultiNode()
+        self.test_obj_full = nodes.BiOrderedMultiNode(1)
 
 def get_test_suite():
     """A function which generates a test suite for the nodes.py file.
