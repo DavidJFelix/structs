@@ -61,7 +61,7 @@ class Node(object):
     @staticmethod
     def are_nodes(iterable):
         for each in iterable:
-            if not isinstance(each, self.__class__):
+            if not isinstance(each, Node):
                 return False
 
         return True
@@ -240,7 +240,7 @@ class BiBinaryNode(BinaryNode):
     def parent(self):
         self._parent = None
 
-# Alais BiBinaryNode by another familiar name, TrinaryNode
+# Alias BiBinaryNode by another familiar name, TrinaryNode
 TrinaryNode = BiBinaryNode
 
 class MultiNode(Node):
