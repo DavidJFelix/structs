@@ -128,39 +128,107 @@ class NodeTestCase(unittest.TestCase):
                          'data should return a 2 after being set to 2',
                         )
 
-    def test_data_set_fail(self):
-        """Test that set for data fails when done improperly.
+    def test_data_set_inprop(self):
+        """Test the behavior for setting _data, which is considered incorrect.
         This tests the way that data is handled when an inpropper attempt is
-        made to change it.
+        made to change it. The expected behavior is to set the value of data,
+        in this case with no property protections. User beware.
         """
 
-        # Improperly set data test while testing for expected exceptions
-        with self.assertRaises(AttributeError):
-            self.test_obj_empty._data = 2
-
-        with self.assertRaises(AttributeError):
-            self.test_obj_full._data = 2
+        # Improperly set data
+        self.test_obj_empty._data = 2
+        self.test_obj_full._data = 2
 
         # Tests below here are dependent on a working get function for data
         # Check data of test_obj_empty for no change
         self.assertIsNone(self.test_obj_empty._data,
-                          '_data should not have been set to 2',
+                          '_data should still have been set to 2',
                          )
         self.assertEqual(self.test_obj_empty.data,
                          self.test_obj_empty._data,
-                         'data should not return a 2 after not being set to 2',
+                         'data should return a 2 after being set to 2',
                         )
 
         # Check data of test_obj_full for no change
         self.assertEqual(self.test_obj_full._data,
                          1,
-                         '_data should have not been set to 2',
+                         '_data should still have been set to 2',
                         )
         self.assertEqual(self.test_obj_full.data,
                          self.test_obj_full._data,
-                         'data should not return a 2 after not being set to 2',
+                         'data should return a 2 after being set to 2',
                         )
 
+    def test_data_delete(self):
+        """Test delete techniques for data.
+        This tests that when data is deleted, the expected action, setting data
+        to None, occurs. data and _data should still be usable if 'del data' is
+        declared.
+        """
+
+        self.test_obj_empty.data = 2
+        # Tests below here are dependent on a working set function for data
+        # Properly delete data for test
+        del self.test_obj_empty.data
+        del self.test_obj_full.data
+
+        # Check data of test_obj_empty for None
+        self.assertIsNone(self.test_obj_empty._data,
+                          '_data should have been set to None by the delete',
+                         )
+        self.assertEqual(self.test_obj_empty.data,
+                         self.test_obj_empty._data,
+                         'data should return None just as _data did'
+                        )
+
+        # Check data of test_obj_full for None
+        self.assertIsNone(self.test_obj_full._data,
+                          '_data should have been set to None by the delte',
+                         )
+        self.assertEqual(self.test_obj_full.data,
+                         self.test_obj_full._data,
+                         'data should return None just as _data did'
+                        )
+
+    def test_data_delete_inprop(self):
+        """Test boundary cases for deleting _data.
+        This tests ways for expected results when somebody declares 'del _data'.
+        Expected behavior is that _data and data will become unusable. This
+        action normally would be protected against, but there may be boundary
+        cases where deleting _data like this is necessary. Protection for users
+        has been added by making data a property to begin with, messing around
+        with underscore variables should be enough of a warning.
+        """
+
+        # Delete data improperly via _data
+        del self.test_obj_empty._data
+        del self.test_obj_full._data
+
+        # Test that _data gets deleted for real
+        with self.assertRaises(AttributeError):
+            self.test_obj_empty._data
+
+        with self.assertRaises(AttributeError):
+            self.test_obj_empty.data
+
+        with self.assertRaises(AttributeError):
+            self.test_obj_full._data
+
+        with self.assertRaises(AttributeError):
+            self.test_obj_full.data
+
+        # Test that a set still works
+        self.test_obj_empty.data = 2
+        self.test_obj_full.data = 2
+        self.asserEqual(self.test_obj_empty.data,
+                        2,
+                        'data should now be 2',
+                        )
+        self.asserEqual(self.test_obj_full.data,
+                        2,
+                        'data should now be 2',
+                        )
+        
     def test_are_nodes(self):
         """Test for the are_nodes() static method.
         This tests that the are_nodes() function is correctly identifying lists
@@ -174,26 +242,32 @@ class NodeTestCase(unittest.TestCase):
 
         # Test both existing nodes' are_nodes() using a list of entirely nodes
         self.assertTrue(self.test_obj_empty.are_nodes(node_list),
-                        'A list of nodes passed to are_nodes() should return True',
+                        'A list of nodes passed to are_nodes() should ' + \
+                        'return True',
                        )
         self.assertTrue(self.test_obj_full.are_nodes(node_list),
-                        'A list of nodes passed to are_nodes() should return True',
+                        'A list of nodes passed to are_nodes() should ' + \
+                        'return True',
                        )
 
         # Test both existing nodes' are_nodes() using a mixed list
         self.assertFalse(self.test_obj_empty.are_nodes(mixed_list),
-                         'A mixed list of nodes and non-nodes passed to are_nodes() should return False',
+                         'A mixed list of nodes and non-nodes passed to ' + \
+                         'are_nodes() should return False',
                         )
         self.assertFalse(self.test_obj_full.are_nodes(mixed_list),
-                         'A mixed list of nodes and non-nodes passed to are_nodes() should return False',
+                         'A mixed list of nodes and non-nodes passed to ' + \
+                         'are_nodes() should return False',
                         )
 
         # Test both existing nodes' are_nodes() using a list of entirely ints
         self.assertFalse(self.test_obj_empty.are_nodes(int_list),
-                         'A list of ints passed to are_nodes() should return False',
+                         'A list of ints passed to are_nodes() should ' + \
+                         'return False',
                         }
         self.assertFalse(self.test_obj_full.are_nodes(int_list),
-                         'A list of ints passed to are_nodes() should return False',
+                         'A list of ints passed to are_nodes() should ' + \
+                         'return False',
                         }
 
     def tearDown(self):
@@ -246,15 +320,17 @@ class LinkedNodeTestCase(NodeTestCase):
                         'getter for right should return same value as _right',
                         )
 
+        # Tests below here are dependent on a working set and delete function
+        # for right
         # Change the values to of right check that get retrieves the new values
-        # Tests below here are dependent on a working set function for right
         self.test_obj_empty.right = self.test_obj_full
         del self.test_obj_full.right
 
         # Check right of test_obj_empty again
         self.assertEqual(self.test_obj_empty._right,
                          self.test_obj_full,
-                         '_right was set to test_obj_full and should now return test_obj_full',
+                         '_right was set to test_obj_full and should now ' + \
+                         'return test_obj_full',
                         )
         self.assertEqual(self.test_obj_empty.right,
                          self.test_obj_empty._right,
@@ -277,38 +353,39 @@ class LinkedNodeTestCase(NodeTestCase):
         return false passes if test_right_get has failed before it.
         """
 
-        # Properly set right test
-        self.test_obj_empty.right = 2
-        self.test_obj_full.right = 2
+        # Properly set right
+        self.test_obj_empty.right = self.test_obj_full
+        self.test_obj_full.right = self.test_obj_empty
+
+        # Check that right was set for test_obj_empty
         self.assertEqual(self.test_obj_empty._right,
-                         2,
-                         '_right should have been set to 2',
+                         self.test_obj_full,
+                         '_right should have been set to test_obj_full',
                         )
         self.assertEqual(self.test_obj_empty.right,
-                         2,
-                         'right should return a 2 after being set to 2',
-                        )
-        self.assertEqual(self.test_obj_full._right,
-                         2,
-                         '_right should have been set to 2',
-                        )
-        self.assertEqual(self.test_obj_full.right,
-                         2,
-                         'right should return a 2 after being set to 2',
+                         self.test_obj_full,
+                         'right should return test_obj_full after being set',
                         )
 
-    def test_right_set_fail(self):
-        """Test that set for right fails when done improperly.
+        # Check that right was set for test_ob_full
+        self.assertEqual(self.test_obj_full._right,
+                         self.test_obj_empty,
+                         '_right should have been set to test_obj_empty',
+                        )
+        self.assertEqual(self.test_obj_full.right,
+                         self.test_obj_empty,
+                         'right should return test_obj_empty after being set',
+                        )
+
+    def test_right_set_inprop(self):
+        """Test the behavior of setting _right, which is considered incorrect.
         This tests the way that right is handled when an inpropper attempt is
         made to change it.
         """
 
         # Improperly set right test
-        with self.assertRaises(AttributeError):
-            self.test_obj_empty._right = 2
-
-        with self.assertRaises(AttributeError):
-            self.test_obj_full._right = 2
+        self.test_obj_empty._right = self.test_obj_full
+        self.test_obj_full._right = self.test_obj_empty
 
         self.assertIsNone(self.test_obj_empty._right,
                           '_right should not have been set to 2',
@@ -466,7 +543,8 @@ class BiBinaryNodeTestCase(BinaryNodeTestCase):
                          )
         self.assertEqual(self.test_obj_empty.parent,
                          self.test_obj_empty._parent,
-                         'getter for parent should return same value as _parent',
+                         'getter for parent should return same value as ' + \
+                         '_parent',
                         )
         self.assertEqual(self.test_obj_full._parent,
                          1,
@@ -474,7 +552,8 @@ class BiBinaryNodeTestCase(BinaryNodeTestCase):
                         )
         self.assertEqual(self.test_obj_full.parent,
                          self.test_obj_full._parent,
-                        'getter for parent should return same value as _parent',
+                        'getter for parent should return same value as ' + \
+                        '_parent',
                         )
         self.test_obj_empty.parent = 2
         self.test_obj_full.parent = 2
@@ -484,7 +563,8 @@ class BiBinaryNodeTestCase(BinaryNodeTestCase):
                         )
         self.assertEqual(self.test_obj_empty.parent,
                          self.test_obj_empty._parent,
-                         'getter for parent should return same value as _parent',
+                         'getter for parent should return same value as ' + \
+                         '_parent',
                         )
         self.assertEqual(self.test_obj_full.parent,
                          2,
@@ -492,7 +572,8 @@ class BiBinaryNodeTestCase(BinaryNodeTestCase):
                         )
         self.assertEqual(self.test_obj_full.parent,
                          self.test_obj_full._parent,
-                         'getter for parent should return same value as _parent',
+                         'getter for parent should return same value as ' + \
+                         '_parent',
                         )
 
     def test_parent_set(self):
@@ -540,7 +621,8 @@ class BiBinaryNodeTestCase(BinaryNodeTestCase):
                          )
         self.assertEqual(self.test_obj_empty.parent,
                          self.test_obj_empty._parent,
-                         'parent should not return a 2 after not being set to 2',
+                         'parent should not return a 2 after not being set ' + \
+                         'to 2',
                         )
         self.assertEqual(self.test_obj_full._parent,
                          1,
@@ -548,7 +630,8 @@ class BiBinaryNodeTestCase(BinaryNodeTestCase):
                         )
         self.assertEqual(self.test_obj_full.parent,
                          self.test_obj_full._parent,
-                         'parent should not return a 2 after not being set to 2',
+                         'parent should not return a 2 after not being set ' + \
+                         'to 2',
                         )
 
 class TrinaryNodeTestCase(BiBinaryNodeTestCase):
