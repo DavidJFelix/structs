@@ -140,18 +140,19 @@ class NodeTestCase(unittest.TestCase):
         self.test_obj_full._data = 2
 
         # Tests below here are dependent on a working get function for data
-        # Check data of test_obj_empty for no change
-        self.assertIsNone(self.test_obj_empty._data,
-                          '_data should still have been set to 2',
-                         )
+        # Check data of test_obj_empty for change
+        self.assertEqual(self.test_obj_empty._data,
+                         2,
+                         '_data should still have been set to 2',
+                        )
         self.assertEqual(self.test_obj_empty.data,
                          self.test_obj_empty._data,
                          'data should return a 2 after being set to 2',
                         )
 
-        # Check data of test_obj_full for no change
+        # Check data of test_obj_full for change
         self.assertEqual(self.test_obj_full._data,
-                         1,
+                         2,
                          '_data should still have been set to 2',
                         )
         self.assertEqual(self.test_obj_full.data,
@@ -167,6 +168,7 @@ class NodeTestCase(unittest.TestCase):
         """
 
         self.test_obj_empty.data = 2
+
         # Tests below here are dependent on a working set function for data
         # Properly delete data for test
         del self.test_obj_empty.data
@@ -178,7 +180,7 @@ class NodeTestCase(unittest.TestCase):
                          )
         self.assertEqual(self.test_obj_empty.data,
                          self.test_obj_empty._data,
-                         'data should return None just as _data did'
+                         'data should return None just as _data did',
                         )
 
         # Check data of test_obj_full for None
@@ -217,18 +219,51 @@ class NodeTestCase(unittest.TestCase):
         with self.assertRaises(AttributeError):
             self.test_obj_full.data
 
+        # The following tests depend on a functioning get and set for data
         # Test that a set still works
         self.test_obj_empty.data = 2
         self.test_obj_full.data = 2
-        self.asserEqual(self.test_obj_empty.data,
-                        2,
-                        'data should now be 2',
+        self.assertEqual(self.test_obj_empty._data,
+                         2,
+                         '_data should now be 2',
                         )
-        self.asserEqual(self.test_obj_full.data,
-                        2,
-                        'data should now be 2',
+        self.assertEqual(self.test_obj_empty.data,
+                         2,
+                         'data should now be 2',
                         )
-        
+        self.assertEqual(self.test_obj_full._data,
+                         2,
+                         '_data should now be 2',
+                        )
+        self.assertEqual(self.test_obj_full.data,
+                         2,
+                         'data should now be 2',
+                        )
+
+        # Redelete
+        del self.test_obj_empty._data
+        del self.test_obj_full.data
+
+        # Test that a hard set also works
+        self.test_obj_empty._data = 2
+        self.test_obj_full._data = 2
+        self.assertEqual(self.test_obj_empty._data,
+                         2,
+                         '_data should now be 2',
+                        )
+        self.assertEqual(self.test_obj_empty.data,
+                         2,
+                         'data should now be 2',
+                        )
+        self.assertEqual(self.test_obj_full._data,
+                         2,
+                         '_data should now be 2',
+                        )
+        self.assertEqual(self.test_obj_full.data,
+                         2,
+                         'data should now be 2',
+                        )
+
     def test_are_nodes(self):
         """Test for the are_nodes() static method.
         This tests that the are_nodes() function is correctly identifying lists
@@ -294,10 +329,10 @@ class LinkedNodeTestCase(NodeTestCase):
 
     def test_right_get(self):
         """Test get techniques for right explicitly. Implicitly test __init__.
-        This test will check that _right is properly by __init__ and that the
-        right get method correctly returns the value stored in right. This test
-        also checks that set values on can be gotten properly. This portion of
-        the test overlaps part of test_right_set's test. Half of this test
+        This test will check that _right is set properly by __init__ and that
+        the right get method correctly returns the value stored in right. This
+        test also checks that set values on can be gotten properly. This portion
+        of the test overlaps part of test_right_set's test. Half of this test
         relies on a functioning set right method to return correct test results.
         """
 
@@ -387,20 +422,126 @@ class LinkedNodeTestCase(NodeTestCase):
         self.test_obj_empty._right = self.test_obj_full
         self.test_obj_full._right = self.test_obj_empty
 
-        self.assertIsNone(self.test_obj_empty._right,
-                          '_right should not have been set to 2',
-                         )
+        self.assertEqual(self.test_obj_empty._right,
+                         self.test_obj_full,
+                         '_right should have still been set to test_obj_full',
+                        )
         self.assertEqual(self.test_obj_empty.right,
                          self.test_obj_empty._right,
-                         'right should not return a 2 after not being set to 2',
+                         'right should return test_obj_full like _right did',
                         )
         self.assertEqual(self.test_obj_full._right,
-                         1,
-                         '_right should have not been set to 2',
+                         self.tesT_obj_empty,
+                         '_right should have still been set to test_obj_empty',
                         )
         self.assertEqual(self.test_obj_full.right,
                          self.test_obj_full._right,
-                         'right should not return a 2 after not being set to 2',
+                         'right should return test_obj_full like _right did',
+                        )
+
+    def test_right_delete(self):
+        """Test delete techniques for right.
+        This tests that when right is deleted, the expected action, setting
+        right to None, occurs. right and _right should still be usable if
+        'del right' is declared.
+        """
+
+        self.test_obj_empty.right = self.test_obj_full
+
+        # Tests below here are dependant on a working set function for right
+        # Properly delete right for test
+        del self.test_obj_empty.right
+        del self.test_obj_full.right
+
+        # Check right of test_obj_empty for None
+        self.assertIsNone(self.test_obj_empty._right,
+                          '_right should have been set to None by the delete',
+                         )
+        self.assertEqual(self.test_obj_empty.right,
+                         self.test_obj_empty._right,
+                         'right should return None just as _right did',
+                        )
+
+        # Check right of test_obj_full for None
+        self.assertIsNone(self.test_obj_full._right,
+                          '_right should have been set to None by the delete',
+                         )
+        self.assertEqual(self.test_obj_full.right,
+                         self.test_obj_full._right,
+                         'right should return None just as _right did',
+                        )
+
+    def test_right_delete_inprop(self):
+        """Test boundary cases for deleting _right.
+        This tests ways for expected results when somebody declares
+        'del _right'. Expected behavior is that _right and right will become
+        unusable. This action normally would be protected against, but there may
+        be boundary cases where deleting _right like this is necessary.
+        Protection for users has been added by making right a property to begin
+        with, messing around with underscore variables should be enough of a
+        warning.
+        """
+
+        # Delete data improperly via _right
+        del self.test_obj_empty._right
+        del self.test_obj_full._right
+
+        # Test that _right gets deleted for real
+        with self.assertRaises(AttributeError):
+            self.test_obj_empty._right
+
+        with self.assertRaises(AttributeError):
+            self.test_obj_empty.right
+
+        with self.assertRaises(AttributeError):
+            self.test_obj_full._right
+
+        with self.assertRaises(AttributeError):
+            self.test_obj_full.right
+
+        # The following tests depend on a working get and set for right
+        # Test that a set still works
+        self.test_obj_empty.right = self.test_obj_full
+        self.test_obj_full.right = self.test_obj_empty
+        self.asserEqual(self.test_obj_empty.right,
+                        self.test_obj_full,
+                        'right should now be self.test_obj_full',
+                        )
+        self.asserEqual(self.test_obj_empty._right,
+                        self.test_obj_full,
+                        '_right should now be self.test_obj_full',
+                        )
+        self.asserEqual(self.test_obj_full.right,
+                        self.test_obj_empty,
+                        'right should now be self.test_obj_empty',
+                        )
+        self.asserEqual(self.test_obj_full._right,
+                        self.test_obj_empty,
+                        '_right should now be self.test_obj_empty',
+                        )
+
+        # Redelete
+        del self.test_obj_empty._right
+        del self.test_obj_full._right
+
+        # Test that a hard set works also
+        self.test_obj_empty._right = self.test_obj_full
+        self.test_obj_full._right = self.test_obj_empty
+        self.asserEqual(self.test_obj_empty.right,
+                        self.test_obj_full,
+                        'right should now be self.test_obj_full',
+                        )
+        self.asserEqual(self.test_obj_empty._right,
+                        self.test_obj_full,
+                        '_right should now be self.test_obj_full',
+                        )
+        self.asserEqual(self.test_obj_full.right,
+                        self.test_obj_empty,
+                        'right should now be self.test_obj_empty',
+                        )
+        self.asserEqual(self.test_obj_full._right,
+                        self.test_obj_empty,
+                        '_right should now be self.test_obj_empty',
                         )
 
 class BinaryNodeTestCase(LinkedNodeTestCase):
@@ -414,17 +555,21 @@ class BinaryNodeTestCase(LinkedNodeTestCase):
 
     def setUp(self):
         self.test_obj_empty = nodes.BinaryNode()
-        self.test_obj_full = nodes.BinaryNode(1)
+        self.test_obj_full = nodes.BinaryNode(1,
+                                              self.test_obj_empty,
+                                              self.test_obj_empty,
+                                             )
 
     def test_left_get(self):
         """Test get techniques for left explicitly. Implicitly test __init__.
-        This test will check that _left is properly by __init__ and that the
+        This test will check that _left is set properly by __init__ and that the
         left get method correctly returns the value stored in left. This test
         also checks that set values on can be gotten properly. This portion of
-        the test overlaps part of test_left_set's test. Half of this test
-        relies on a functioning set left method to return correct test results.
+        the test overlaps part of test_left_set's test. Half of this test relies
+        on a functioning set left method to return correct test results.
         """
 
+        # Check initialized left of test_obj_empty
         self.assertIsNone(self.test_obj_empty._left,
                           '_left should be initialized as None',
                          )
@@ -432,27 +577,37 @@ class BinaryNodeTestCase(LinkedNodeTestCase):
                          self.test_obj_empty._left,
                          'getter for left should return same value as _left',
                         )
+
+        # Check initialized left of test_obj_full
         self.assertEqual(self.test_obj_full._left,
-                         1,
-                         '_left should be initialized as 1',
+                         self.test_obj_empty,
+                         '_left should be initialized as test_obj_full',
                         )
         self.assertEqual(self.test_obj_full.left,
                          self.test_obj_full._left,
                         'getter for left should return same value as _left',
                         )
-        self.test_obj_empty.left = 2
-        self.test_obj_full.left = 2
+
+        # Tests below here are dependent on a working set and delete function
+        # for left
+        # Change the values to of left check that get retrieves the new values
+        self.test_obj_empty.left = self.test_obj_full
+        del self.test_obj_full.left
+
+        # Check left of test_obj_empty again
         self.assertEqual(self.test_obj_empty._left,
-                         2,
-                         '_left was set to 2 and should now return 2',
+                         self.test_obj_full,
+                         '_left was set to test_obj_full and should now ' + \
+                         'return test_obj_full',
                         )
         self.assertEqual(self.test_obj_empty.left,
                          self.test_obj_empty._left,
                          'getter for left should return same value as _left',
                         )
-        self.assertEqual(self.test_obj_full.left,
-                         2,
-                         '_left was set to 2 and should now return 2',
+
+        # Check left of test_obj_full again
+        self.assertNone(self.test_obj_full.left,
+                         '_left was deleted and should now return None',
                         )
         self.assertEqual(self.test_obj_full.left,
                          self.test_obj_full._left,
@@ -466,53 +621,159 @@ class BinaryNodeTestCase(LinkedNodeTestCase):
         return false passes if test_left_get has failed before it.
         """
 
-        # Properly set left test
-        self.test_obj_empty.left = 2
-        self.test_obj_full.left = 2
+        # Properly set left
+        self.test_obj_empty.left = self.test_obj_full
+        self.test_obj_full.left = self.test_obj_empty
+
+        # Check that left was set for test_obj_empty
         self.assertEqual(self.test_obj_empty._left,
-                         2,
-                         '_left should have been set to 2',
+                         self.test_obj_full,
+                         '_left should have been set to test_obj_full',
                         )
         self.assertEqual(self.test_obj_empty.left,
-                         2,
-                         'left should return a 2 after being set to 2',
-                        )
-        self.assertEqual(self.test_obj_full._left,
-                         2,
-                         '_left should have been set to 2',
-                        )
-        self.assertEqual(self.test_obj_full.left,
-                         2,
-                         'left should return a 2 after being set to 2',
+                         self.test_obj_full,
+                         'left should return test_obj_full after being set',
                         )
 
-    def test_left_set_fail(self):
-        """Test that set for left fails when done improperly.
+        # Check that left was set for test_ob_full
+        self.assertEqual(self.test_obj_full._left,
+                         self.test_obj_empty,
+                         '_left should have been set to test_obj_empty',
+                        )
+        self.assertEqual(self.test_obj_full.left,
+                         self.test_obj_empty,
+                         'left should return test_obj_empty after being set',
+                        )
+
+    def test_left_set_inprop(self):
+        """Test the behavior of setting _left, which is considered incorrect.
         This tests the way that left is handled when an inpropper attempt is
         made to change it.
         """
 
         # Improperly set left test
-        with self.assertRaises(AttributeError):
-            self.test_obj_empty._left = 2
+        self.test_obj_empty._left = self.test_obj_full
+        self.test_obj_full._left = self.test_obj_empty
 
-        with self.assertRaises(AttributeError):
-            self.test_obj_full._left = 2
-
-        self.assertIsNone(self.test_obj_empty._left,
-                          '_left should not have been set to 2',
-                         )
+        self.assertEqual(self.test_obj_empty._left,
+                         self.test_obj_full,
+                         '_left should have still been set to test_obj_full',
+                        )
         self.assertEqual(self.test_obj_empty.left,
                          self.test_obj_empty._left,
-                         'left should not return a 2 after not being set to 2',
+                         'left should return test_obj_full like _left did',
                         )
         self.assertEqual(self.test_obj_full._left,
-                         1,
-                         '_left should have not been set to 2',
+                         self.tesT_obj_empty,
+                         '_left should have still been set to test_obj_empty',
                         )
         self.assertEqual(self.test_obj_full.left,
                          self.test_obj_full._left,
-                         'left should not return a 2 after not being set to 2',
+                         'left should return test_obj_full like _left did',
+                        )
+
+    def test_left_delete(self):
+        """Test delete techniques for left.
+        This tests that when left is deleted, the expected action, setting left
+        to None, occurs. left and _left should still be usable if 'del left' is
+        declared.
+        """
+
+        self.test_obj_empty.left = self.test_obj_full
+
+        # Tests below here are dependant on a working set function for left
+        # Properly delete left for test
+        del self.test_obj_empty.left
+        del self.test_obj_full.left
+
+        # Check left of test_obj_empty for None
+        self.assertIsNone(self.test_obj_empty._left,
+                          '_left should have been set to None by the delete',
+                         )
+        self.assertEqual(self.test_obj_empty.left,
+                         self.test_obj_empty._left,
+                         'left should return None just as _left did',
+                        )
+
+        # Check left of test_obj_full for None
+        self.assertIsNone(self.test_obj_full._left,
+                          '_left should have been set to None by the delete',
+                         )
+        self.assertEqual(self.test_obj_full.left,
+                         self.test_obj_full._left,
+                         'left should return None just as _left did',
+                        )
+
+    def test_left_delete_inprop(self):
+        """Test boundary cases for deleting _left.
+        This tests ways for expected results when somebody declares 'del _left'.
+        Expected behavior is that _left and left will become unusable. This
+        action normally would be protected against, but there may be boundary
+        cases where deleting _left like this is necessary. Protection for users
+        has been added by making left a property to begin with, messing around
+        with underscore variables should be enough of a warning.
+        """
+
+        # Delete data improperly via _left
+        del self.test_obj_empty._left
+        del self.test_obj_full._left
+
+        # Test that _left gets deleted for real
+        with self.assertRaises(AttributeError):
+            self.test_obj_empty._left
+
+        with self.assertRaises(AttributeError):
+            self.test_obj_empty.left
+
+        with self.assertRaises(AttributeError):
+            self.test_obj_full._left
+
+        with self.assertRaises(AttributeError):
+            self.test_obj_full.left
+
+        # The following tests depend on a working get and set for left
+        # Test that a set still works
+        self.test_obj_empty.left = self.test_obj_full
+        self.test_obj_full.left = self.test_obj_empty
+        self.asserEqual(self.test_obj_empty.left,
+                        self.test_obj_full,
+                        'left should now be self.test_obj_full',
+                        )
+        self.asserEqual(self.test_obj_empty._left,
+                        self.test_obj_full,
+                        '_left should now be self.test_obj_full',
+                        )
+        self.asserEqual(self.test_obj_full.left,
+                        self.test_obj_empty,
+                        'left should now be self.test_obj_empty',
+                        )
+        self.asserEqual(self.test_obj_full._left,
+                        self.test_obj_empty,
+                        '_left should now be self.test_obj_empty',
+                        )
+
+        # Redelete
+        del self.test_obj_empty._left
+        del self.test_obj_full._left
+
+        # Test that a hard set works also
+        self.test_obj_empty._left = self.test_obj_full
+        self.test_obj_full._left = self.test_obj_empty
+        self.asserEqual(self.test_obj_empty.left,
+                        self.test_obj_full,
+                        'left should now be self.test_obj_full',
+                        )
+        self.asserEqual(self.test_obj_empty._left,
+                        self.test_obj_full,
+                        '_left should now be self.test_obj_full',
+                        )
+        self.asserEqual(self.test_obj_full.left,
+                        self.test_obj_empty,
+                        'left should now be self.test_obj_empty',
+                        )
+        self.asserEqual(self.test_obj_full._left,
+                        self.test_obj_empty,
+                        '_left should now be self.test_obj_empty',
                         )
 
 class BiBinaryNodeTestCase(BinaryNodeTestCase):
@@ -526,49 +787,62 @@ class BiBinaryNodeTestCase(BinaryNodeTestCase):
 
     def setUp(self):
         self.test_obj_empty = nodes.BiBinaryNode()
-        self.test_obj_full = nodes.BiBinaryNode(1)
+        self.test_obj_full = nodes.BiBinaryNode(1,
+                                                self.test_obj_empty,
+                                                self.test_obj_empty,
+                                                self.test_obj_empty,
+                                               )
 
     def test_parent_get(self):
         """Test get techniques for parent explicitly. Implicitly test __init__.
-        This test will check that _parent is properly by __init__ and that the
-        parent get method correctly returns the value stored in parent. This
+        This test will check that _parent is set properly by __init__ and that
+        the parent get method correctly returns the value stored in parent. This
         test also checks that set values on can be gotten properly. This portion
         of the test overlaps part of test_parent_set's test. Half of this test
         relies on a functioning set parent method to return correct test
         results.
         """
 
+        # Check initialized parent of test_obj_empty
         self.assertIsNone(self.test_obj_empty._parent,
                           '_parent should be initialized as None',
                          )
         self.assertEqual(self.test_obj_empty.parent,
                          self.test_obj_empty._parent,
-                         'getter for parent should return same value as ' + \
-                         '_parent',
+                         'getter for parent should return same value as _parent',
                         )
+
+        # Check initialized parent of test_obj_full
         self.assertEqual(self.test_obj_full._parent,
-                         1,
-                         '_parent should be initialized as 1',
+                         self.test_obj_empty,
+                         '_parent should be initialized as test_obj_full',
                         )
         self.assertEqual(self.test_obj_full.parent,
                          self.test_obj_full._parent,
-                        'getter for parent should return same value as ' + \
-                        '_parent',
+                        'getter for parent should return same value as _parent',
                         )
-        self.test_obj_empty.parent = 2
-        self.test_obj_full.parent = 2
+
+        # Tests below here are dependent on a working set and delete function
+        # for parent
+        # Change the values to of parent check that get retrieves the new values
+        self.test_obj_empty.parent = self.test_obj_full
+        del self.test_obj_full.parent
+
+        # Check parent of test_obj_empty again
         self.assertEqual(self.test_obj_empty._parent,
-                         2,
-                         '_parent was set to 2 and should now return 2',
+                         self.test_obj_full,
+                         '_parent was set to test_obj_full and should now ' + \
+                         'return test_obj_full',
                         )
         self.assertEqual(self.test_obj_empty.parent,
                          self.test_obj_empty._parent,
                          'getter for parent should return same value as ' + \
                          '_parent',
                         )
-        self.assertEqual(self.test_obj_full.parent,
-                         2,
-                         '_parent was set to 2 and should now return 2',
+
+        # Check parent of test_obj_full again
+        self.assertNone(self.test_obj_full.parent,
+                         '_parent was deleted and should now return None',
                         )
         self.assertEqual(self.test_obj_full.parent,
                          self.test_obj_full._parent,
@@ -583,55 +857,160 @@ class BiBinaryNodeTestCase(BinaryNodeTestCase):
         may return false passes if test_parent_get has failed before it.
         """
 
-        # Properly set parent test
-        self.test_obj_empty.parent = 2
-        self.test_obj_full.parent = 2
+        # Properly set parent
+        self.test_obj_empty.parent = self.test_obj_full
+        self.test_obj_full.parent = self.test_obj_empty
+
+        # Check that parent was set for test_obj_empty
         self.assertEqual(self.test_obj_empty._parent,
-                         2,
-                         '_parent should have been set to 2',
+                         self.test_obj_full,
+                         '_parent should have been set to test_obj_full',
                         )
         self.assertEqual(self.test_obj_empty.parent,
-                         2,
-                         'parent should return a 2 after being set to 2',
-                        )
-        self.assertEqual(self.test_obj_full._parent,
-                         2,
-                         '_parent should have been set to 2',
-                        )
-        self.assertEqual(self.test_obj_full.parent,
-                         2,
-                         'parent should return a 2 after being set to 2',
+                         self.test_obj_full,
+                         'parent should return test_obj_full after being set',
                         )
 
-    def test_parent_set_fail(self):
-        """Test that set for parent fails when done improperly.
+        # Check that parent was set for test_ob_full
+        self.assertEqual(self.test_obj_full._parent,
+                         self.test_obj_empty,
+                         '_parent should have been set to test_obj_empty',
+                        )
+        self.assertEqual(self.test_obj_full.parent,
+                         self.test_obj_empty,
+                         'parent should return test_obj_empty after being set',
+                        )
+
+    def test_parent_set_inprop(self):
+        """Test the behavior of setting _parent, which is considered incorrect.
         This tests the way that parent is handled when an inpropper attempt is
         made to change it.
         """
 
         # Improperly set parent test
-        with self.assertRaises(AttributeError):
-            self.test_obj_empty._parent = 2
+        self.test_obj_empty._parent = self.test_obj_full
+        self.test_obj_full._parent = self.test_obj_empty
 
-        with self.assertRaises(AttributeError):
-            self.test_obj_full._parent = 2
-
-        self.assertIsNone(self.test_obj_empty._parent,
-                          '_parent should not have been set to 2',
-                         )
+        self.assertEqual(self.test_obj_empty._parent,
+                         self.test_obj_full,
+                         '_parent should have still been set to test_obj_full',
+                        )
         self.assertEqual(self.test_obj_empty.parent,
                          self.test_obj_empty._parent,
-                         'parent should not return a 2 after not being set ' + \
-                         'to 2',
+                         'parent should return test_obj_full like _parent did',
                         )
         self.assertEqual(self.test_obj_full._parent,
-                         1,
-                         '_parent should have not been set to 2',
+                         self.tesT_obj_empty,
+                         '_parent should have still been set to test_obj_empty',
                         )
         self.assertEqual(self.test_obj_full.parent,
                          self.test_obj_full._parent,
-                         'parent should not return a 2 after not being set ' + \
-                         'to 2',
+                         'parent should return test_obj_full like _parent did',
+                        )
+
+    def test_parent_delete(self):
+        """Test delete techniques for parent.
+        This tests that when parent is deleted, the expected action, setting
+        parent to None, occurs. parent and _parent should still be usable if
+        'del parent' is declared.
+        """
+
+        self.test_obj_empty.parent = self.test_obj_full
+
+        # Tests below here are dependant on a working set function for parent
+        # Properly delete parent for test
+        del self.test_obj_empty.parent
+        del self.test_obj_full.parent
+
+        # Check parent of test_obj_empty for None
+        self.assertIsNone(self.test_obj_empty._parent,
+                          '_parent should have been set to None by the delete',
+                         )
+        self.assertEqual(self.test_obj_empty.parent,
+                         self.test_obj_empty._parent,
+                         'parent should return None just as _parent did',
+                        )
+
+        # Check parent of test_obj_full for None
+        self.assertIsNone(self.test_obj_full._parent,
+                          '_parent should have been set to None by the delete',
+                         )
+        self.assertEqual(self.test_obj_full.parent,
+                         self.test_obj_full._parent,
+                         'parent should return None just as _parent did',
+                        )
+
+    def test_parent_delete_inprop(self):
+        """Test boundary cases for deleting _parent.
+        This tests ways for expected results when somebody declares
+        'del _parent'. Expected behavior is that _parent and parent will become
+        unusable. This action normally would be protected against, but there may
+        be boundary cases where deleting _parent like this is necessary.
+        Protection for users has been added by making parent a property to begin
+        with, messing around with underscore variables should be enough of a
+        warning.
+        """
+
+        # Delete data improperly via _parent
+        del self.test_obj_empty._parent
+        del self.test_obj_full._parent
+
+        # Test that _parent gets deleted for real
+        with self.assertRaises(AttributeError):
+            self.test_obj_empty._parent
+
+        with self.assertRaises(AttributeError):
+            self.test_obj_empty.parent
+
+        with self.assertRaises(AttributeError):
+            self.test_obj_full._parent
+
+        with self.assertRaises(AttributeError):
+            self.test_obj_full.parent
+
+        # The following tests depend on a working get and set for parent
+        # Test that a set still works
+        self.test_obj_empty.parent = self.test_obj_full
+        self.test_obj_full.parent = self.test_obj_empty
+        self.asserEqual(self.test_obj_empty.parent,
+                        self.test_obj_full,
+                        'parent should now be self.test_obj_full',
+                        )
+        self.asserEqual(self.test_obj_empty._parent,
+                        self.test_obj_full,
+                        '_parent should now be self.test_obj_full',
+                        )
+        self.asserEqual(self.test_obj_full.parent,
+                        self.test_obj_empty,
+                        'parent should now be self.test_obj_empty',
+                        )
+        self.asserEqual(self.test_obj_full._parent,
+                        self.test_obj_empty,
+                        '_parent should now be self.test_obj_empty',
+                        )
+
+        # Redelete
+        del self.test_obj_empty._parent
+        del self.test_obj_full._parent
+
+        # Test that a hard set works also
+        self.test_obj_empty._parent = self.test_obj_full
+        self.test_obj_full._parent = self.test_obj_empty
+        self.asserEqual(self.test_obj_empty.parent,
+                        self.test_obj_full,
+                        'parent should now be self.test_obj_full',
+                        )
+        self.asserEqual(self.test_obj_empty._parent,
+                        self.test_obj_full,
+                        '_parent should now be self.test_obj_full',
+                        )
+        self.asserEqual(self.test_obj_full.parent,
+                        self.test_obj_empty,
+                        'parent should now be self.test_obj_empty',
+                        )
+        self.asserEqual(self.test_obj_full._parent,
+                        self.test_obj_empty,
+                        '_parent should now be self.test_obj_empty',
                         )
 
 class TrinaryNodeTestCase(BiBinaryNodeTestCase):
@@ -692,14 +1071,32 @@ class BiOrderedMultiNodeTestCase(OrderedMultiNodeTestCase):
 
 def get_test_suite():
     """A function which generates a test suite for the nodes.py file.
+    In order to make a test active within the automated testing, implemented in
+    this file and called by other files, the test must be loaded by test_loader,
+    below. See the comment below for the syntax for loading a test class.
     """
     nodes_test_suite = unittest.TestSuite()
     test_loader = nodes_test_suite.TestLoader()
+
+    # Load test cases below, syntax:
+    # test_loader.loadTestsFromTestCase(%Class_name%)
     test_loader.loadTestsFromTestCase(NodeTestCase)
     test_loader.loadTestsFromTestCase(LinkedNodeTestCase)
+    test_loader.loadTestsFromTestCase(BinaryNodeTestCase)
+    test_loader.loadTestsFromTestCase(BiBinaryNodeTestCase)
+    test_loader.loadTestsFromTestCase(TrinaryNodeTestCase)
+    test_loader.loadTestsFromTestCase(MultiNodeTestCase)
+    test_loader.loadTestsFromTestCase(BiMultiNodeTestCase)
+    test_loader.loadTestsFromTestCase(OrderedMultiNodeTestCase)
+    test_loader.loadTestsFromTestCase(BiOrderedMultiNodeTestCase)
     return nodes_test_suite
 
 def run_test():
+    """A function which runs all tests contained in this file.
+    This function is called when file is run as a script, but can also be called
+    explicitly. There is currently no support in this file for individual tests,
+    but support may be added in the future.
+    """
     nodes_test_suite = get_test_suite()
     tester = unittest.TextTestRunner(verbosity = 2)
     tester.run(nodes_test_suite)
