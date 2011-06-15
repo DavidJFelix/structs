@@ -299,11 +299,11 @@ class NodeTestCase(unittest.TestCase):
         self.assertFalse(self.test_obj_empty.are_nodes(int_list),
                          'A list of ints passed to are_nodes() should ' + \
                          'return False',
-                        }
+                        )
         self.assertFalse(self.test_obj_full.are_nodes(int_list),
                          'A list of ints passed to are_nodes() should ' + \
                          'return False',
-                        }
+                        )
 
     def tearDown(self):
         """The unittest tearDown function for this test case.
@@ -1021,7 +1021,11 @@ class TrinaryNodeTestCase(BiBinaryNodeTestCase):
 
     def setUp(self):
         self.test_obj_empty = nodes.TrinaryNode()
-        self.test_obj_full = nodes.TrinaryNode(1)
+        self.test_obj_full = nodes.TrinaryNode(1,
+                                               self.test_obj_empty,
+                                               self.test_obj_empty,
+                                               self.test_obj_empty,
+                                              )
 
 class MultiNodeTestCase(NodeTestCase):
     """A test case fot the MultiNode class.
@@ -1034,7 +1038,10 @@ class MultiNodeTestCase(NodeTestCase):
 
     def setUp(self):
         self.test_obj_empty = nodes.MultiNode()
-        self.test_obj_full = nodes.MultiNode(1)
+        node_set = (self.test_obj_empty)
+        self.test_obj_full = nodes.MultiNode(1,
+                                             node_set,
+                                            )
 
     def test_children_get(self):
         pass
@@ -1045,13 +1052,32 @@ class MultiNodeTestCase(NodeTestCase):
     def test_children_set_fail(self):
         pass
 
+    def test_children_set_improp(self):
+        pass
+
 class BiMultiNodeTestCase(MultiNodeTestCase):
     """
     """
 
     def setUp(self):
         self.test_obj_empty = nodes.BiMultiNode()
-        self.test_obj_full = nodes.BiMultiNode(1)
+        node_set = set(self.test_obj_empty)
+        self.test_obj_full = nodes.BiMultiNode(1,
+                                               node_set,
+                                               node_set,
+                                              )
+
+    def test_parents_get(self):
+        pass
+
+    def test_parents_set(self):
+        pass
+
+    def test_parents_set_fail(self):
+        pass
+
+    def test_parents_set_improp(self):
+        pass
 
 class OrderedMultiNodeTestCase(NodeTestCase):
     """
@@ -1059,7 +1085,10 @@ class OrderedMultiNodeTestCase(NodeTestCase):
 
     def setUp(self):
         self.test_obj_empty = nodes.OrderedMultiNode()
-        self.test_obj_full = nodes.OrderedMultiNode(1)
+        node_list = list(self.test_obj_empty)
+        self.test_obj_full = nodes.OrderedMultiNode(1,
+                                                    node_list,
+                                                   )
 
 class BiOrderedMultiNodeTestCase(OrderedMultiNodeTestCase):
     """
@@ -1067,7 +1096,11 @@ class BiOrderedMultiNodeTestCase(OrderedMultiNodeTestCase):
 
     def setUp(self):
         self.test_obj_empty = nodes.BiOrderedMultiNode()
-        self.test_obj_full = nodes.BiOrderedMultiNode(1)
+        node_list = list(self.test_obj_empty)
+        self.test_obj_full = nodes.BiOrderedMultiNode(1,
+                                                      node_list,
+                                                      node_list,
+                                                     )
 
 def get_test_suite():
     """A function which generates a test suite for the nodes.py file.
