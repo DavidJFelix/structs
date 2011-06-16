@@ -31,7 +31,7 @@ from structs import nodes
 class NodeTestCase(unittest.TestCase):
     """A test case for the Node class.
     This test case tests different elements of Node for expected behaviors.
-    These tests are interdependent and any test failure that this test does not
+    These tests are interdependent and any test failure that this case does not
     account as less important could possibly indicate flawed test results for
     other passed (or failed) tests in this case. The tests that this case runs
     are for the functioning of the "data" attribute of the Node, as this is all
@@ -45,7 +45,7 @@ class NodeTestCase(unittest.TestCase):
 
     def test_data_get(self):
         """Test get techniques for data explicitly. Implicitly test __init__.
-        This test will check that _data is properly by __init__ and that the
+        This test will check that _data is properly set by __init__ and that the
         data get method correctly returns the value stored in data. This test
         also checks that set values on can be gotten properly. This portion of
         the test overlaps part of test_data_set's test. Half of this test relies
@@ -316,7 +316,7 @@ class NodeTestCase(unittest.TestCase):
 
 class LinkedNodeTestCase(NodeTestCase):
     """A test case for the LinkedNode class.
-    These tests are interdependent and any test failure that this test does not
+    These tests are interdependent and any test failure that this case does not
     account as less important could possibly indicate flawed test results for
     other passed (or failed) tests in this case. This test case inherits
     NodeTestCase to test the functionality of data, but adds to the case by
@@ -546,7 +546,7 @@ class LinkedNodeTestCase(NodeTestCase):
 
 class BinaryNodeTestCase(LinkedNodeTestCase):
     """A test case for the BinaryNode class.
-    These tests are interdependent and any test failure that this test does not
+    These tests are interdependent and any test failure that this case does not
     account as less important could possibly indicate flawed test results for
     other passed (or failed) tests in this case. This test case inherits
     LinkedNodeTestCase to test the functionality of data and right, but adds to
@@ -778,7 +778,7 @@ class BinaryNodeTestCase(LinkedNodeTestCase):
 
 class BiBinaryNodeTestCase(BinaryNodeTestCase):
     """A test case for the BiBinaryNode class.
-    These tests are interdependent and any test failure that this test does not
+    These tests are interdependent and any test failure that this case does not
     account as less important could possibly indicate flawed test results for
     other passed (or failed) tests in this case. This test case inherits
     BinaryNodeTestCase to test the functionality of data, right and left, but
@@ -1017,7 +1017,8 @@ class TrinaryNodeTestCase(BiBinaryNodeTestCase):
     """A test case for the TrinaryNode class.
     This test should be identical to the BiBinaryNodeTestCase because
     TrinaryNode is an alias for BiBinaryNode. This test case just ensures that
-    the alias is functioning correctly."""
+    the alias is functioning correctly.
+    """
 
     def setUp(self):
         self.test_obj_empty = nodes.TrinaryNode()
@@ -1029,9 +1030,9 @@ class TrinaryNodeTestCase(BiBinaryNodeTestCase):
 
 class MultiNodeTestCase(NodeTestCase):
     """A test case fot the MultiNode class.
-    These tests are interdependent and any test failure that this test does not
+    These tests are interdependent and any test failure that this case does not
     account as less important could possibly indicate flawed test results for
-    other passed (or faild) tests in this case. This test case inherits
+    other passed (or failed) tests in this case. This test case inherits
     NodeTestCase to test the functionality of data, but adds to the case by
     testing the functionality of "children".
     """
@@ -1044,7 +1045,63 @@ class MultiNodeTestCase(NodeTestCase):
                                             )
 
     def test_children_get(self):
-        pass
+        """Test get techniques of children explicitly. Implicitly test __init__.
+        This test will check that _children is properly set by __init__ and that
+        the children get method correctly returns the value stored in _children.
+        This test also checks that set and deleted values on can be gotten
+        properly. This portion of the test overlaps part of test_children_set
+        and test_children_delete's tests. Half of this test relies on
+        functioning set and delete children methods to return correct test
+        results.
+        """
+
+        # Check for empty set of children in test_obj_empty
+        self.assertEqual(self.test_obj_empty.children,
+                         set(),
+                         'children should be an empty set',
+                        )
+        self.assertEqual(self.test_obj_empty._children,
+                         set(),
+                         '_children should be an empty set',
+                        )
+
+        # Check for a set containing expected values in test_obj_full
+        self.assertEqual(self.test_obj_full.children,
+                         set(self.test_obj_empty),
+                         'chilren should be a set containing test_obj_empty',
+                        )
+        self.assertEqual(self.test_obj_full._children,
+                         set(self.test_obj_empty),
+                         '_children should be a set containing test_obj_empty',
+                        )
+        # Change the values of children to check that get retrives new values
+        # Tests below here are dependent on a working set and delete function
+        # for children
+        self.test_obj_empty.children = set(self.test_obj_full)
+        del self.test_obj_full.children
+
+        # Check for empty set of children in test_obj_empty
+        self.assertEqual(self.test_obj_empty.children,
+                         set(self.test_obj_full),
+                         'chilren should be a set containing test_obj_empty',
+                        )
+        self.assertEqual(self.test_obj_empty._children,
+                         set(self.test_obj_full),
+                         '_children should be a set containing test_obj_empty',
+                        )
+
+        # Check for a set containing expected values in test_obj_full
+        self.assertEqual(self.test_obj_full.children,
+                         set(),
+                         'children should be an empty set',
+                        )
+        self.assertEqual(self.test_obj_full._children,
+                         set(),
+                         '_children should be an empty set',
+                        )
+
+        
+
 
     def test_children_set(self):
         pass
@@ -1056,7 +1113,12 @@ class MultiNodeTestCase(NodeTestCase):
         pass
 
 class BiMultiNodeTestCase(MultiNodeTestCase):
-    """
+    """A test case for the BiMultiNode class.
+    These tests are interdependent and any test failure that this case does not
+    account as less important could possibly indicate flawed test results for
+    other passed (or failed) tests in this case. This test case inherits
+    MulitNodeTestCase to test the functionality of data and children, but adds
+    to the case by testing the functionality of "parents".
     """
 
     def setUp(self):
@@ -1080,7 +1142,12 @@ class BiMultiNodeTestCase(MultiNodeTestCase):
         pass
 
 class OrderedMultiNodeTestCase(NodeTestCase):
-    """
+    """A test case for the OrderedMultiNode class.
+    These tests are interdependent and any test failure that this case does not
+    account as less important could possibly indicate flawed test results for
+    other passed (or failed) tests in this case. This test case inherits
+    NodeTestCase to test the functionality of data, but adds to the case by
+    testing the functionality of "children".
     """
 
     def setUp(self):
@@ -1090,8 +1157,25 @@ class OrderedMultiNodeTestCase(NodeTestCase):
                                                     node_list,
                                                    )
 
+    def test_children_get(self):
+        pass
+
+    def test_children_set(self):
+        pass
+
+    def test_children_set_fail(self):
+        pass
+
+    def test_children_set_improp(self):
+        pass
+
 class BiOrderedMultiNodeTestCase(OrderedMultiNodeTestCase):
-    """
+    """A test case for the BiOrderedMultiNode class.
+    These tests are interdependent and any test failure that this case does not
+    account as less important could possibly indicate flawed test results for
+    other passed (or failed) tests in this case. This test case inherits
+    OrderedMultiNodeTestCase to test the functionality of data and children,
+    but adds to the case by testing the functionality of "parents".
     """
 
     def setUp(self):
@@ -1101,6 +1185,18 @@ class BiOrderedMultiNodeTestCase(OrderedMultiNodeTestCase):
                                                       node_list,
                                                       node_list,
                                                      )
+
+    def test_parents_get(self):
+        pass
+
+    def test_parents_set(self):
+        pass
+
+    def test_parents_set_fail(self):
+        pass
+
+    def test_parents_set_improp(self):
+        pass
 
 def get_test_suite():
     """A function which generates a test suite for the nodes.py file.
