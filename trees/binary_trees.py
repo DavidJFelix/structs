@@ -30,7 +30,6 @@ import nodes
 class BinaryTree(object):
     """A tree data structure in which each node has at most two child nodes"""
 
-    binary_tree_err = 'linked trees must be BinaryTree type'
     def __contains__(self, item):
         if item == self.data:
             return True
@@ -66,7 +65,8 @@ class BinaryTree(object):
         else:
             return 0
 
-    def __init__(self, data = None, order = 'in', store_len = False):
+    def __init__(self, data = None, order = 'in', store_len = False);
+        self.binary_tree_err = 'linked trees must be BinaryTree type'
         self.root = BiBinaryNode(data)
         self.store_len = store_len
         if store_len:

@@ -390,7 +390,7 @@ class LinkedNodeTestCase(NodeTestCase):
 
         # Properly set right
         self.test_obj_empty.right = self.test_obj_full
-        self.test_obj_full.right = self.test_obj_empty
+        self.test_obj_full.right = self.test_obj_full
 
         # Check that right was set for test_obj_empty
         self.assertEqual(self.test_obj_empty._right,
@@ -402,15 +402,18 @@ class LinkedNodeTestCase(NodeTestCase):
                          'right should return test_obj_full after being set',
                         )
 
-        # Check that right was set for test_ob_full
+        # Check that right was set for test_obj_full
         self.assertEqual(self.test_obj_full._right,
-                         self.test_obj_empty,
+                         self.test_obj_full,
                          '_right should have been set to test_obj_empty',
                         )
         self.assertEqual(self.test_obj_full.right,
-                         self.test_obj_empty,
+                         self.test_obj_full,
                          'right should return test_obj_empty after being set',
                         )
+
+    def test_right_set_fail(self):
+        pass
 
     def test_right_set_inprop(self):
         """Test the behavior of setting _right, which is considered incorrect.
@@ -487,16 +490,16 @@ class LinkedNodeTestCase(NodeTestCase):
         del self.test_obj_full._right
 
         # Test that _right gets deleted for real
-        with self.assertRaises(AttributeError):
+        with self.assertRaises(AttributeError, '_right should not exist'):
             self.test_obj_empty._right
 
-        with self.assertRaises(AttributeError):
+        with self.assertRaises(AttributeError, 'right should not exist'):
             self.test_obj_empty.right
 
-        with self.assertRaises(AttributeError):
+        with self.assertRaises(AttributeError, '_right should not exist'):
             self.test_obj_full._right
 
-        with self.assertRaises(AttributeError):
+        with self.assertRaises(AttributeError, 'right should not exist'):
             self.test_obj_full.right
 
         # The following tests depend on a working get and set for right
@@ -623,7 +626,7 @@ class BinaryNodeTestCase(LinkedNodeTestCase):
 
         # Properly set left
         self.test_obj_empty.left = self.test_obj_full
-        self.test_obj_full.left = self.test_obj_empty
+        self.test_obj_full.left = self.test_obj_full
 
         # Check that left was set for test_obj_empty
         self.assertEqual(self.test_obj_empty._left,
@@ -635,15 +638,18 @@ class BinaryNodeTestCase(LinkedNodeTestCase):
                          'left should return test_obj_full after being set',
                         )
 
-        # Check that left was set for test_ob_full
+        # Check that left was set for test_obj_full
         self.assertEqual(self.test_obj_full._left,
-                         self.test_obj_empty,
-                         '_left should have been set to test_obj_empty',
+                         self.test_obj_full,
+                         '_left should have been set to test_obj_full',
                         )
         self.assertEqual(self.test_obj_full.left,
-                         self.test_obj_empty,
-                         'left should return test_obj_empty after being set',
+                         self.test_obj_full,
+                         'left should return test_obj_full after being set',
                         )
+
+    def test_left_set_fail(self):
+        pass
 
     def test_left_set_inprop(self):
         """Test the behavior of setting _left, which is considered incorrect.
@@ -859,7 +865,7 @@ class BiBinaryNodeTestCase(BinaryNodeTestCase):
 
         # Properly set parent
         self.test_obj_empty.parent = self.test_obj_full
-        self.test_obj_full.parent = self.test_obj_empty
+        self.test_obj_full.parent = self.test_obj_full
 
         # Check that parent was set for test_obj_empty
         self.assertEqual(self.test_obj_empty._parent,
@@ -871,7 +877,7 @@ class BiBinaryNodeTestCase(BinaryNodeTestCase):
                          'parent should return test_obj_full after being set',
                         )
 
-        # Check that parent was set for test_ob_full
+        # Check that parent was set for test_obj_full
         self.assertEqual(self.test_obj_full._parent,
                          self.test_obj_empty,
                          '_parent should have been set to test_obj_empty',
@@ -880,6 +886,9 @@ class BiBinaryNodeTestCase(BinaryNodeTestCase):
                          self.test_obj_empty,
                          'parent should return test_obj_empty after being set',
                         )
+
+    def test_parent_set_fail(self):
+        pass
 
     def test_parent_set_inprop(self):
         """Test the behavior of setting _parent, which is considered incorrect.
@@ -951,6 +960,12 @@ class BiBinaryNodeTestCase(BinaryNodeTestCase):
         warning.
         """
 
+        # Fail messages used below
+        p_full_fail = 'parent should now be self.test_obj_full'
+        _p_full_fail = '_parent should now be self.test_obj_full'
+        p_empty_fail = 'parent should now be self.test_obj_empty'
+        _p_empty_fail = '_parent should now be self.test_obj_empty'
+
         # Delete data improperly via _parent
         del self.test_obj_empty._parent
         del self.test_obj_full._parent
@@ -974,19 +989,19 @@ class BiBinaryNodeTestCase(BinaryNodeTestCase):
         self.test_obj_full.parent = self.test_obj_empty
         self.asserEqual(self.test_obj_empty.parent,
                         self.test_obj_full,
-                        'parent should now be self.test_obj_full',
+                        msg = p_full_fail,
                         )
         self.asserEqual(self.test_obj_empty._parent,
                         self.test_obj_full,
-                        '_parent should now be self.test_obj_full',
+                        msg = _p_full_fail,
                         )
         self.asserEqual(self.test_obj_full.parent,
                         self.test_obj_empty,
-                        'parent should now be self.test_obj_empty',
+                        msg = p_empty_fail,
                         )
         self.asserEqual(self.test_obj_full._parent,
                         self.test_obj_empty,
-                        '_parent should now be self.test_obj_empty',
+                        msg = _p_empty_fail,
                         )
 
         # Redelete
@@ -998,19 +1013,19 @@ class BiBinaryNodeTestCase(BinaryNodeTestCase):
         self.test_obj_full._parent = self.test_obj_empty
         self.asserEqual(self.test_obj_empty.parent,
                         self.test_obj_full,
-                        'parent should now be self.test_obj_full',
+                        msg = p_full_fail,
                         )
         self.asserEqual(self.test_obj_empty._parent,
                         self.test_obj_full,
-                        '_parent should now be self.test_obj_full',
+                        msg = _p_full_fail,
                         )
         self.asserEqual(self.test_obj_full.parent,
                         self.test_obj_empty,
-                        'parent should now be self.test_obj_empty',
+                        msg = p_empty_fail,
                         )
         self.asserEqual(self.test_obj_full._parent,
                         self.test_obj_empty,
-                        '_parent should now be self.test_obj_empty',
+                        msg = _p_empty_fail,
                         )
 
 class TrinaryNodeTestCase(BiBinaryNodeTestCase):
@@ -1039,7 +1054,7 @@ class MultiNodeTestCase(NodeTestCase):
 
     def setUp(self):
         self.test_obj_empty = nodes.MultiNode()
-        node_set = (self.test_obj_empty)
+        node_set = set(self.test_obj_empty)
         self.test_obj_full = nodes.MultiNode(1,
                                              node_set,
                                             )
@@ -1055,24 +1070,33 @@ class MultiNodeTestCase(NodeTestCase):
         results.
         """
 
+        # Fail messages used below
+        _empty_set_fail = '_children should be an empty set'
+        empty_set_fail = 'children should be an empty set'
+        _set_empty_fail = '_children should be a set containing test_obj_empty'
+        set_empty_fail = 'chilren should be a set containing test_obj_empty'
+        _set_full_fail = '_children should be a set containing test_obj_full'
+        set_full_fail = 'chilren should be a set containing test_obj_full'
+
+
         # Check for empty set of children in test_obj_empty
         self.assertEqual(self.test_obj_empty.children,
                          set(),
-                         'children should be an empty set',
+                         msg = empty_set_fail,
                         )
         self.assertEqual(self.test_obj_empty._children,
                          set(),
-                         '_children should be an empty set',
+                         msg = _empty_set_fail,
                         )
 
         # Check for a set containing expected values in test_obj_full
         self.assertEqual(self.test_obj_full.children,
                          set(self.test_obj_empty),
-                         'chilren should be a set containing test_obj_empty',
+                         msg = set_empty_fail,
                         )
         self.assertEqual(self.test_obj_full._children,
                          set(self.test_obj_empty),
-                         '_children should be a set containing test_obj_empty',
+                         msg = _set_empty_fail,
                         )
         # Change the values of children to check that get retrives new values
         # Tests below here are dependent on a working set and delete function
@@ -1083,31 +1107,74 @@ class MultiNodeTestCase(NodeTestCase):
         # Check for empty set of children in test_obj_empty
         self.assertEqual(self.test_obj_empty.children,
                          set(self.test_obj_full),
-                         'chilren should be a set containing test_obj_empty',
+                         msg = set_full_fail,
                         )
         self.assertEqual(self.test_obj_empty._children,
                          set(self.test_obj_full),
-                         '_children should be a set containing test_obj_empty',
+                         msg = _set_full_fail,
                         )
 
         # Check for a set containing expected values in test_obj_full
         self.assertEqual(self.test_obj_full.children,
                          set(),
-                         'children should be an empty set',
+                         msg = empty_set_fail,
                         )
         self.assertEqual(self.test_obj_full._children,
                          set(),
-                         '_children should be an empty set',
+                         msg = _empty_set_fail,
                         )
 
-        
-
-
     def test_children_set(self):
-        pass
+        """Test set techniques for children explicitly.
+        This test will check that _children is properly set by invoking
+        children's set method. This test relies on a properly functioning
+        get method, and may return false passes if test_children_get has failed
+        before it.
+        """
+
+        # Fail messages used below
+        _fail_msg = '_children should have been set to a set containing ' + \
+                    'test_obj_full'
+        fail_msg = 'children should return a set containing test_obj_full ' + \
+                   'after it was set'
+
+        # Properly set children
+        self.test_obj_empty.children = set(self.test_obj_full)
+        self.test_obj_full.children = set(self.test_obj_full)
+
+        # Check that children was set for test_obj_empty
+        self.assertEqual(self.test_obj_empty._children,
+                         set(self.test_obj_full),
+                         msg = _fail_msg,
+                        )
+        self.assertEqual(self.test_obj_empty.children,
+                         set(self.test_obj_full),
+                         msg = fail_msg,
+                        )
+
+        # Check that children was set for test_obj_full
+        self.assertEqual(self.test_obj_full._children,
+                         set(self.test_obj_full),
+                         msg = _fail_msg,
+                        )
+        self.assertEqual(self.test_obj_full.children,
+                         set(self.test_obj_full),
+                         msg = fail_msg,
+                        )
 
     def test_children_set_fail(self):
-        pass
+        """
+        """
+
+        # Fail messages used below
+        fail_msg = 'children should not be allowed to be set to a non-set type'
+
+        # Attempt to set chilren to a non-set data type
+        with self.assertRaises(TypeError, fail_msg):
+            self.test_obj_empty.children = 1
+
+        with self.assertRaises(TypeError, fail_msg):
+            self.test_obj_full.children = 1
 
     def test_children_set_improp(self):
         pass
