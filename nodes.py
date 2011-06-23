@@ -39,6 +39,14 @@ class Node(object):
     Properties:
         data:
             how code and users interact with the _data attribute.
+
+    Methods:
+        are_nodes (static method):
+            This method determines whether or not the single parameter, an
+            iterable object, contains entirely objects which inherited the Node
+            class. This method is useful for ensuring that structures, (no
+            matter how complex) that derive from the Node class, can easily
+            ensure that they link to containers not directly to items.
     """
 
     def __init__(self, data = None):
@@ -60,6 +68,13 @@ class Node(object):
 
     @staticmethod
     def are_nodes(iterable):
+        """This method determines whether an iterable contains only Nodes.
+        The single parameter, an iterable object, will be checked to see if it
+        contains entirely objects which inherited the Node class. This method is
+        useful for ensuring that structures, (no matter how complex) that derive
+        from the Node class, can easily ensure that they link to containers not
+        directly to items.
+        """
         for each in iterable:
             if not isinstance(each, Node):
                 return False
@@ -89,6 +104,14 @@ class LinkedNode(Node):
 
         right:
             how code and users interact with the _right attribute.
+
+    Methods:
+        are_nodes (static method):
+            This method determines whether or not the single parameter, an
+            iterable object, contains entirely objects which inherited the Node
+            class. This method is useful for ensuring that structures, (no
+            matter how complex) that derive from the Node class, can easily
+            ensure that they link to containers not directly to items.
     """
 
     def __init__(self, data = None, right = None):
@@ -147,6 +170,14 @@ class BinaryNode(LinkedNode):
 
         left:
             how code and users interact with the _left attribute.
+
+    Methods:
+        are_nodes (static method):
+            This method determines whether or not the single parameter, an
+            iterable object, contains entirely objects which inherited the Node
+            class. This method is useful for ensuring that structures, (no
+            matter how complex) that derive from the Node class, can easily
+            ensure that they link to containers not directly to items.
     """
 
     def __init__(self, data = None, right = None, left = None):
@@ -173,6 +204,9 @@ class BinaryNode(LinkedNode):
     @left.deleter
     def left(self):
         self._left = None
+
+# Alias BinaryNode by another familiar name, DoublyLinkedNode
+DoublyLinkedNode = Binary Node
 
 class BiBinaryNode(BinaryNode):
     """A bidirectional container class with two children.
@@ -213,6 +247,14 @@ class BiBinaryNode(BinaryNode):
 
         parent:
             how code and users interact with the _parent attribute.
+
+    Methods:
+        are_nodes (static method):
+            This method determines whether or not the single parameter, an
+            iterable object, contains entirely objects which inherited the Node
+            class. This method is useful for ensuring that structures, (no
+            matter how complex) that derive from the Node class, can easily
+            ensure that they link to containers not directly to items.
     """
 
     def __init__(self, data = None, right = None, left = None, parent = None):
@@ -265,6 +307,14 @@ class MultiNode(Node):
 
         children:
             how code and users interact with the _children attribute.
+
+    Methods:
+        are_nodes (static method):
+            This method determines whether or not the single parameter, an
+            iterable object, contains entirely objects which inherited the Node
+            class. This method is useful for ensuring that structures, (no
+            matter how complex) that derive from the Node class, can easily
+            ensure that they link to containers not directly to items.
     """
 
     set_err = 'must be of type "set"'
@@ -331,6 +381,14 @@ class BiMultiNode(MultiNode):
 
         parents:
             how code and users interact with the _parents attribute.
+
+    Methods:
+        are_nodes (static method):
+            This method determines whether or not the single parameter, an
+            iterable object, contains entirely objects which inherited the Node
+            class. This method is useful for ensuring that structures, (no
+            matter how complex) that derive from the Node class, can easily
+            ensure that they link to containers not directly to items.
     """
 
     def __init__(self, data = None, children = set(), parents = set()):
@@ -387,6 +445,14 @@ class OrderedMultiNode(Node):
 
         children:
             how code and users interact with the _children attribute.
+
+    Methods:
+        are_nodes (static method):
+            This method determines whether or not the single parameter, an
+            iterable object, contains entirely objects which inherited the Node
+            class. This method is useful for ensuring that structures, (no
+            matter how complex) that derive from the Node class, can easily
+            ensure that they link to containers not directly to items.
     """
 
     list_err = 'must be of type "list"'
@@ -454,6 +520,14 @@ class BiOrderedMultiNode(OrderedMultiNode):
 
         parents:
             how code and users interact with the _parents attribute.
+
+    Methods:
+        are_nodes (static method):
+            This method determines whether or not the single parameter, an
+            iterable object, contains entirely objects which inherited the Node
+            class. This method is useful for ensuring that structures, (no
+            matter how complex) that derive from the Node class, can easily
+            ensure that they link to containers not directly to items.
     """
 
     def __init__(self, data = None, children = [], parents = []):

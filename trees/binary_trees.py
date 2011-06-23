@@ -27,90 +27,68 @@
 
 import nodes
 
-class BinaryTree(nodes.BiBinaryNode):
+class BinaryTree(object):
     """A tree data structure in which each node has at most two child nodes"""
 
     binary_tree_err = 'linked trees must be BinaryTree type'
-    def __init__(self, data = None, parent = None):
-        super().__init__(data, None, None, parent)
+    def __contains__(self, item):
+        if item == self.data:
+            return True
+
+        if self.left:
+            if item in self.left:
+                return True
+
+        if self.right:
+            if item in self.right:
+                return True
+
+        return False
+
+    def __getitem__(self, key):
+        pass
+
+    def __len__(self):
+        """A recurse function which determines the number of elements."""
+        if self.store_len:
+            return self.length
+
+        elif data:
+            length = 1
+            if self.left:
+                length += len(self.left)
+
+            if self.right:
+                length += len(self.left)
+
+            return length
+
+        else:
+            return 0
+
+    def __init__(self, data = None, order = 'in', store_len = False):
+        self.root = BiBinaryNode(data)
+        self.store_len = store_len
+        if store_len:
+            if data:
+                self.length = 1
+
+            else:
+                self.lendth = 0
+
+        if order in ['in', 'post', 'pre', 'level']:
+            self.order = order
+
+        else:
+            self.order = 'in'
 
     def __iter__(self):
         return self
 
     def __next__(self):
-        """A recursive function used for in-order iteration"""
-        if self.left:
-            for each in self.left:
-                yield each
-
-        yield self.data
-
-        if self.right:
-            for each in self.right:
-                yield each
-
-        raise StopIteration
-
-    def pre_order(self):
-        """A recursive function used for pre-order iteration"""
-
-        yield self.data
-
-        if self.left:
-            for each in self.left.pre_order():
-                yield each
-
-        if self.right:
-            for each in self.right.pre_order():
-                yield each
-
-        raise StopIteration
-
-    def post_order(self):
-        """A recursive function used for post-order iteration"""
-
-        if self.left:
-            for each in self.left.post_order():
-                yield each
-
-        if self.right:
-            for each in self.right.post_order():
-                yield each
-
-        yield self.data
-        raise StopIteration
-
-    def __len__(self):
-        """A recurse function which determines the number of elements."""
-
-        length = 1
-        if self.left:
-            length += len(self.left)
-
-        if self.right:
-            length += len(self.left)
-
-        return length
-
-    def __getitem__(self, key):
-        pass
-
-    def pre_getitem(self, key):
-        pass
-
-    def post_getitem(self, key):
         pass
 
     def __setitem__(self, key, value):
-        pass
-
-    def pre_setitem(self, key, value):
-        pass
-
-    def post_setitem(self, key, value):
-        pass
-
-    def __contains__(self, item):
         pass
 
 '''class AATree(RedBlackTree):
