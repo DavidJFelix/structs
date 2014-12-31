@@ -25,7 +25,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-import nodes
+from nodes import BiBinaryNode
 
 class BinaryTree(object):
     """A tree data structure in which each node has at most two child nodes"""
